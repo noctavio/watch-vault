@@ -1,0 +1,53 @@
+import { Container, Navbar, Nav, Row, Col } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { UserContext } from './User';
+
+export default function Layout({ children }) {
+    const { user, setUser } = useContext(UserContext);
+    const isLogin = (aUser) => {
+        return (aUser === null || aUser === undefined || Object.keys(aUser).length === 0)
+    };
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    const navLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link'
+    return (
+        <>
+            <header>
+                <Navbar expand="lg" data-bs-theme="dark">
+                    <Container fluid>
+                        <Navbar.Brand as={NavLink} to="/">WatchVault</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="ms-auto">
+                                <Nav.Link as={NavLink} to="/" className={navLinkClass} end>Home</Nav.Link>
+                                <Nav.Link to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
+                                <Nav.Link as={NavLink} to="/search" className={navLinkClass}>Search For Movie</Nav.Link>
+                                <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Your Recommendations</Nav.Link>
+                                {isLogin(user) ? (
+                                    <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
+                                ) : (
+                                    <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>{user.username}</Nav.Link>
+                                )}
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+            </header>
+            <main>{children}</main>
+            <footer className="fixed-bottom">
+                <Container>
+                    <Row>
+                        <Col sm={6}>
+                            <p>©Team AL_10</p>
+                        </Col>
+                        <Col sm={6} className="text-end">
+                            <button onClick={scrollToTop} className="btn btn-link p-0">
+                                Back to top
+                            </button>
+                        </Col>
+                    </Row>
+                </Container>
+            </footer>
+        </>
+    );
+};

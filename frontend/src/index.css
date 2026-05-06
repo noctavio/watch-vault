@@ -1,0 +1,184 @@
+html, body {
+    overflow-x: hidden; max-width: 100%;
+}
+
+body{
+    background-color: #13111A;
+}
+
+h2{
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    color: #C9A84C;
+}
+
+#authorImage{
+   height: 600px;
+}
+
+#background img{
+    height: 600px;
+}
+
+#clearWatchlist{
+    max-width: 800px;
+}
+
+.movie-poster {
+    max-width: fit-content;
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+}
+
+.card{
+    font-family: 'Playfair Display', serif;
+    background-color: #1C1A27;
+    border: 1px solid #2D2840;
+    transition: transform .25s, box-shadow .25s;
+}
+
+.card-title{
+    color: #C9A84C;
+}
+
+.card-header{
+    color: #C9A84C;
+    background-color: transparent;
+    border-bottom: 1px solid #2D2840;
+}
+
+.card-body {
+    color: #D4D2E0;
+}
+
+.card-text{
+    font-size: 16px;
+    color: #F2F0FA;
+}
+
+.card-subtitle {
+    color: #C9A84C;
+}
+
+.navbar {
+    font-family: 'Playfair Display', serif;
+    background-color: #0C0B0F;
+    border-color: #2D2840;
+}
+
+.navbar .navbar-brand {
+    font-size: 24px;
+    font-weight: 700;
+    color: #C9A84C;
+}
+
+.navbar .navbar-brand:hover {
+    font-size: 26px;
+    font-weight: 700;
+    color: #e0bc6e;
+}
+
+.navbar .nav-item .nav-link {
+    font-size: 16px;
+    font-weight: 350;
+    color: #D4D2E0;
+}
+
+.navbar .nav-item .nav-link:hover,
+.navbar .nav-item .nav-link:active,
+.navbar .nav-item .nav-link.active {
+    font-size: 18px;
+    color: #C9A84C;
+}
+
+.btn{
+    font-family: 'Playfair Display', serif;
+    background-color: #A8293E;
+    border-color: #A8293E;
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #C94060;
+    border-color: #C94060;
+}
+
+.btn-warning {
+    background-color: #C9A84C;
+    border-color: #C9A84C;
+    color: #13111A;
+}
+
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+    background-color: #e0bc6e;
+    border-color: #e0bc6e;
+    color: #13111A;
+}
+
+.btn-close{
+    font-family: 'Playfair Display', serif;
+    background-color: #C94060;
+    border-color: #C94060;
+}
+
+.btn-close:hover,
+.btn-close:focus,
+.btn-close:active{
+    background-color: #C94060;
+    border-color: #C94060;
+}
+
+.poster-wrap {
+    position: relative;
+    overflow: hidden;
+}
+
+.genre-overlay {
+    position: absolute; top: 0.5rem; left: 0.5rem;
+    background: rgba(12,11,15,.82);
+    border: 1px solid #2D2840;
+    color: #C9A84C;
+    font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.15rem 0.5rem; border-radius: 3px;
+}
+
+.rating-badge {
+    position: absolute; top: 0.5rem; right: 0.5rem;
+    background: #C9A84C; color: #13111A;
+    font-size: 0.75rem; font-weight: 700;
+    padding: 0.2rem 0.5rem; border-radius: 3px;
+}
+
+.form-label{
+    font-family: 'Playfair Display', serif;
+    color: #C9A84C;
+}
+
+.form-control {
+    background-color: #2A2740;
+    border: 1px solid #3D3960;
+    color: #F2F0FA;
+}
+
+.form-control:focus {
+    background-color: #2A2740;
+    border-color: #C9A84C;
+    color: #F2F0FA;
+    box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.2);
+}
+
+.form-control::placeholder {
+    color: #6c6a7e;
+}
+
+footer{
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    color: #C9A84C;
+    background-color: #0C0B0F;
+}
