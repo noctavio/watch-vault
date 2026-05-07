@@ -19,7 +19,8 @@ router.post("/auth/login", async (req, res) => {
             username: user.username,
             email: user.email,
             watchlistId: user.watchlistId,
-            favGeneres: user.favGeneres
+            favGeneres: user.favGeneres,
+            role: user.role
         });
     } catch (error) {
         console.error("An error occurred:", error);
@@ -77,7 +78,9 @@ router.post("/auth/register", async (req, res) => {
 router.put("/auth/user/:id", async (req, res) => {
     try {
         const id = Number(req.params.id);
-        if (isNaN(id)) return res.status(400).send({ error: "Invalid ID format" });
+        if (isNaN(id)){
+            return res.status(400).send({ error: "Invalid ID format" });
+        }
         const { watchlistId, password, role, ...allowedUpdates } = req.body;
         const result = await db.collection("Users").updateOne(
             { userId: id },
@@ -99,22 +102,51 @@ router.put("/auth/user/:id", async (req, res) => {
 router.delete("/auth/user/:id", async (req, res) => {
     try {
         const id = Number(req.params.id);
-        if (isNaN(id)) return res.status(400).send({ error: "Invalid ID format" });
-
+        if (isNaN(id)){
+            return res.status(400).send({ error: "Invalid ID format" });
+        }
         const user = await db.collection("Users").findOne({ userId: id });
         if (!user) {
             return res.status(404).send({ error: "User Not Found" });
         }
-
         if (user.watchlistId) {
             await db.collection("Watchlists").deleteOne({ watchlistId: user.watchlistId });
         }
-
         const results = await db.collection("Users").deleteOne({ userId: id });
         res.status(200).send(results);
     } catch (error) {
         console.error("Error Deleting User", error);
         res.status(500).send({ message: "Internal Server Error" });
+    }
+});
+
+router.get("/auth/admin/users", async (req, res) => {
+    const results = await db.collection("Users").find({}).limit(100).toArray();
+    console.log(results);
+    res.status(200).send(results);
+});
+
+router.post("/auth/admin/users/:id/role", async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).send({ error: "Invalid ID format" });
+        }
+        const { role } = req.body;
+        if (!["user", "admin"].includes(role)) {
+            return res.status(400).send({ error: "Invalid role, must be 'user' or 'admin'" });
+        }
+        const result = await db.collection("Users").updateOne(
+            { userId: id },
+            { $set: { role } }
+        );
+        if (result.modifiedCount === 0) {
+            return res.status(404).send({ error: "No user found with that ID" });
+        }
+        res.status(200).send({ message: "Role updated successfully" });
+    } catch (error) {
+        console.error("Error updating role:", error);
+        res.status(500).send({ error: "An internal server error occurred" });
     }
 });
 
