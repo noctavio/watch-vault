@@ -176,6 +176,21 @@ h2{
     color: #6c6a7e;
 }
 
+.table {
+    color: #F2F0FA;
+}
+
+.table th {
+    color: #C9A84C;
+    background-color: #1C1A27;
+}
+
+.table td {
+    color: #F2F0FA;
+    background-color: #1C1A27;
+    border-color: #2D2840;
+}
+
 footer{
     text-align: center;
     font-family: 'Playfair Display', serif;

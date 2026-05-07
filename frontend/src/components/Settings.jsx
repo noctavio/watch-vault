@@ -140,9 +140,8 @@ export default function Settings(){
                         <PersonCircle size={64} color="#C9A84C" />
                         <Card.Title className="mt-2">User Settings</Card.Title>
                     </Card.Header>
-                    <Card.Body className="d-flex flex-column gap-3">
-
-                        <Card className="p-3" style={{ maxWidth: "500px" }}>
+                        <Card.Body className="d-flex flex-column gap-3">
+                            <Card className="p-3 w-100">
                             <Card.Header><Card.Subtitle>Account Info</Card.Subtitle></Card.Header>
                             <Card.Body>
                                 <Form onSubmit={handleSubmit(changeAccountInfo)}>
@@ -175,7 +174,7 @@ export default function Settings(){
                             </Card.Body>
                         </Card>
 
-                        <Card className="p-3" style={{ maxWidth: "500px" }}>
+                        <Card className="d-flex flex-column gap-3">
                             <Card.Header><Card.Subtitle>Password</Card.Subtitle></Card.Header>
                             <Card.Body>
                                 <Form onSubmit={handleSubmitPw(changePassword)}>
@@ -209,7 +208,7 @@ export default function Settings(){
                             </Card.Body>
                         </Card>
 
-                        <Card className="p-3" style={{ maxWidth: "500px" }}>
+                        <Card className="d-flex flex-column gap-3">
                             <Card.Header><Card.Subtitle>Preferences</Card.Subtitle></Card.Header>
                             <Card.Body>
                                 <Form.Label>Favourite Genres</Form.Label>
@@ -240,7 +239,7 @@ export default function Settings(){
                         </Card>
 
                         <Card className="p-3" style={{ maxWidth: "500px", borderColor: "#A8293E" }}>
-                            <Card.Header style={{ borderColor: "#A8293E" }}><Card.Subtitle style={{ color: "#A8293E" }}>DANGER</Card.Subtitle></Card.Header>
+                            <Card.Header style={{ borderColor: "#A8293E" }}><Card.Subtitle style={{ color: "#A8293E" }}>WARNING: Permanent Action</Card.Subtitle></Card.Header>
                             <Card.Body>
                                 <Button variant="warning" onClick={deleteUser}>Delete Account</Button>
                             </Card.Body>

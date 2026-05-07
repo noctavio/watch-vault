@@ -4,11 +4,13 @@ import Login from './components/Login.jsx'
 import SignUp from './components/SignUp.jsx'
 import Settings from './components/Settings.jsx';
 import Search from './components/Search.jsx';
+import Admin from './components/Admin.jsx';
 
 export default function App(){
     return (
     <>
         <Routes>
+            <Route path='/adminpage' element={<Admin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/settings" element={<Settings />} />

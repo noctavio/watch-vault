@@ -27,6 +27,9 @@ export default function Layout({ children }) {
                                 ) : (
                                     <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>{user.username}</Nav.Link>
                                 )}
+                                {user.role === 'admin' && (
+                                    <Nav.Link as={NavLink} to="/adminpage" className={navLinkClass}>Admin Controls</Nav.Link>
+                                )}
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
