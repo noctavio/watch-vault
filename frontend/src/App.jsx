@@ -3,6 +3,7 @@ import Home from './components/Home.jsx'
 import Login from './components/Login.jsx'
 import SignUp from './components/SignUp.jsx'
 import Settings from './components/Settings.jsx';
+import Search from './components/Search.jsx';
 
 export default function App(){
     return (
@@ -12,6 +13,7 @@ export default function App(){
             <Route path="/signup" element={<SignUp />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home />} />
+            <Route path="/search" element={<Search />} />
             {/*
             <Route path="/recommendations" element={<Recommendations />} />
             <Route path="/movie_detail" element={<MovieDetail/>} />

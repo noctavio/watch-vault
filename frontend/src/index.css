@@ -74,7 +74,7 @@ h2{
 }
 
 .navbar .navbar-brand:hover {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     color: #e0bc6e;
 }
@@ -181,4 +181,23 @@ footer{
     font-family: 'Playfair Display', serif;
     color: #C9A84C;
     background-color: #0C0B0F;
+}
+
+.search-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 14px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 1400px) { .search-grid { grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 900px)  { .search-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px)  { .search-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 0;
 }

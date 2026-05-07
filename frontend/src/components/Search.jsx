@@ -1,0 +1,133 @@
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Container, Spinner, Alert, Card } from 'react-bootstrap';
+import Layout from './Layout.jsx';
+
+export default function Search() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get('q') || '';
+    const page = parseInt(searchParams.get('page') || '1');
+
+    const [movies, setMovies] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&page=${page}`);
+                const text = await res.text(); // debug string
+                try {
+                    const data = JSON.parse(text);
+                    if (!res.ok) throw new Error(data.error || 'Search failed');
+                    setMovies(data.movies);
+                    setTotal(data.total);
+                    setTotalPages(data.totalPages);
+                } catch {
+                    throw new Error(`Server returned non-JSON: ${text.slice(0, 80)}`);
+                }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMovies();
+    }, [query, page]);
+
+    const goToPage = (newPage) => {
+        setSearchParams({ q: query, page: newPage });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    return (
+        <Layout>
+            <Container fluid className="px-4 py-4">
+
+                <h2 className="mb-4">
+                    {loading ? 'Searching the Vault...' : (
+                        query
+                            ? `${total} result${total !== 1 ? 's' : ''} for "${query}"`
+                            : 'All Movies'
+                    )}
+                </h2>
+
+                {loading && (
+                    <div className="text-center py-5">
+                        <Spinner animation="border" style={{ color: '#C9A84C' }} />
+                    </div>
+                )}
+
+                {!loading && error && (
+                    <Alert variant="danger">{error}</Alert>
+                )}
+
+                {!loading && !error && movies.length === 0 && (
+                    <Alert variant="warning">
+                        No movies found for "{query}". Try a different search term.
+                    </Alert>
+                )}
+
+                {/* Card Grid */}
+                {!loading && !error && movies.length > 0 && (
+                    <div className="search-grid">
+                        {movies.map((movie) => (
+                            <Card key={movie.id}>
+                                <div className="poster-wrap">
+                                    <Card.Img
+                                        variant="top"
+                                        src={movie.poster || 'https://placehold.co/200x300?text=No+Image'}
+                                        alt={movie.title}
+                                        className="movie-poster"
+                                    />
+                                    {/* Genre — top left */}
+                                    {movie.genres?.[0] && (
+                                        <span className="genre-overlay">{movie.genres[0]}</span>
+                                    )}
+                                    {/* Rating — top right */}
+                                    <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
+                                </div>
+                                <Card.Body className="p-2">
+                                    <Card.Title className="mb-0" style={{ fontSize: '0.8rem' }}>
+                                        {movie.title}
+                                    </Card.Title>
+                                    <Card.Subtitle style={{ fontSize: '0.72rem', marginTop: '2px' }}>
+                                        {movie.director} · {movie.releaseYear}
+                                    </Card.Subtitle>
+                                </Card.Body>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+
+                {/* Page Nav */}
+                {!loading && totalPages > 1 && (
+                    <div className="pagination-controls">
+                        <button
+                            className="btn"
+                            onClick={() => goToPage(page - 1)}
+                            disabled={page <= 1}
+                        >
+                            &lt;
+                        </button>
+                        <span style={{ color: '#C9A84C', fontFamily: "'Playfair Display', serif" }}>
+                            Page {page} of {totalPages}
+                        </span>
+                        <button
+                            className="btn"
+                            onClick={() => goToPage(page + 1)}
+                            disabled={page >= totalPages}
+                        >
+                            &gt;
+                        </button>
+                    </div>
+                )}
+
+            </Container>
+        </Layout>
+    );
+}
