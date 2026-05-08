@@ -20,14 +20,14 @@ export default function Layout({ children }) {
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto">
                                 <Nav.Link as={NavLink} to="/" className={navLinkClass} end>Home</Nav.Link>
-                                <Nav.Link to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
+                                <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
                                 <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Your Recommendations</Nav.Link>
                                 {isLogin(user) ? (
                                     <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
                                 ) : (
                                     <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>{user.username}</Nav.Link>
                                 )}
-                                {user.role === 'admin' && (
+                                {user?.role === 'admin' && (
                                     <Nav.Link as={NavLink} to="/adminpage" className={navLinkClass}>Admin Controls</Nav.Link>
                                 )}
                             </Nav>

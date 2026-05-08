@@ -12,9 +12,11 @@ const host = "localhost";
 const userRoutes = require("./api/Users.js");
 const watchlistRoutes = require("./api/Watchlist.js");
 const searchRouter = require("./api/Movies.js");
+const keyRoutes = require("./api/Keys.js");
 
 app.use("/api", userRoutes);
 app.use("/api", watchlistRoutes);
+app.use("/api", keyRoutes)
 app.use('/api', searchRouter);
 
 client.connect().then(() => {

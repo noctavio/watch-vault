@@ -2,6 +2,31 @@ const express = require('express');
 const router = express.Router();
 const { db } = require("../db.js");
 
+router.put("/watchlist/watched/:id", async (req, res) => {
+    try {
+        const watchlistId = Number(req.params.id);
+        const { id } = req.body;
+
+        const watchlist = await db.collection("Watchlists").findOne({ watchlistId });
+        if (!watchlist) return res.status(404).send({ error: "Watchlist not found" });
+
+        const checked = watchlist.itemsChecked ?? [];
+        const updatedChecked = checked.includes(id)
+            ? checked.filter((i) => i !== id)
+            : [...checked, id];
+
+        await db.collection("Watchlists").updateOne(
+            { watchlistId },
+            { $set: { itemsChecked: updatedChecked, updatedAt: new Date() } }
+        );
+
+        res.status(200).send({ itemsChecked: updatedChecked });
+    } catch (error) {
+        console.error("Error updating watched status:", error);
+        res.status(500).send({ error: "An internal server error occurred" });
+    }
+});
+
 router.get("/watchlist/:id", async (req, res) => {
     try {
         const results = await db.collection("Watchlists").findOne({ "watchlistId": Number(req.params.id) });
@@ -26,6 +51,7 @@ router.post("/watchlist", async (req, res) => {
 
         const results = await watchlistsCollection.insertOne({
             "items": [],
+            "itemsChecked": [],
             "createdAt": new Date(),
             "updatedAt": new Date(),
             "watchlistId": watchlistId

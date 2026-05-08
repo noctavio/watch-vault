@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Container, Spinner, Alert, Card } from 'react-bootstrap';
+import { Container, Spinner, Alert, Card, Button } from 'react-bootstrap';
 import Layout from './Layout.jsx';
+import { UserContext } from './User';
 
 export default function Search() {
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('q') || '';
     const page = parseInt(searchParams.get('page') || '1');
 
+    const { user, setUser } = useContext(UserContext);
     const [movies, setMovies] = useState([]);
     const [total, setTotal] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
@@ -38,6 +40,30 @@ export default function Search() {
         };
         fetchMovies();
     }, [query, page]);
+
+    const addToWatchlist = async (movie) => {
+        if (!user) return alert("You need to be logged in to add to your watchlist.");
+            try {
+                const getRes = await fetch(`/api/watchlist/${user.watchlistId}`);
+                if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
+                const data = await getRes.json();
+
+                const currentItems = data.items ?? [];
+                if (currentItems.some((item) => item.id === movie.id)) {
+                    return alert(`"${movie.title}" is already in your watchlist.`);
+                }
+
+                const putRes = await fetch(`/api/watchlist/${user.watchlistId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ items: [...currentItems, movie] }),
+                });
+                if (!putRes.ok) throw new Error("Failed to update watchlist.");
+                alert(`"${movie.title}" added to your watchlist!`);
+            } catch (err) {
+                alert(err.message);
+            }
+    };
 
     const goToPage = (newPage) => {
         setSearchParams({ q: query, page: newPage });
@@ -99,6 +125,9 @@ export default function Search() {
                                         {movie.director} · {movie.releaseYear}
                                     </Card.Subtitle>
                                 </Card.Body>
+                                <Button onClick={() => addToWatchlist(movie)}>
+                                    Add to Watchlist
+                                </Button>
                             </Card>
                         ))}
                     </div>
