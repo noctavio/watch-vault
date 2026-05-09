@@ -7,6 +7,7 @@ import Search from './components/Search.jsx';
 import Admin from './components/Admin.jsx';
 import ByPassLogin from './components/AdminByPassLogin.jsx';
 import Watchlist from './components/Watchlist.jsx';
+import MovieRequest from './components/MovieRequest.jsx';
 
 export default function App(){
     return (
@@ -20,6 +21,7 @@ export default function App(){
             <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/movierequest" element={<MovieRequest />} />
             {/*
             <Route path="/recommendations" element={<Recommendations />} />
             <Route path="/movie_detail" element={<MovieDetail/>} />

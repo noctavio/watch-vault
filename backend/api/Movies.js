@@ -51,6 +51,89 @@ router.get("/search", async (req, res) => {
     }
 });
 
+// fetches 10 results from live api (for movie requests)
+router.get("/movies/tmdb-search", async (req, res) => {
+    try {
+        const query = req.query.q?.trim();
+        if (!query) return res.status(400).send({ error: "No search query provided" });
+
+        const keyDoc = await db.collection("Keys").findOne({ name: "tmdb" });
+        if (!keyDoc) return res.status(500).send({ error: "TMDB API key not found" });
+
+        const API_KEY = keyDoc.value;
+        const response = await fetch(
+            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=1`
+        );
+        const data = await response.json();
+
+        // Return top 10 results, sorted by popularity so we don't get our tmdb use revoked
+        const results = data.results
+            .sort((a, b) => b.popularity - a.popularity)
+            .slice(0, 10)
+            .map((m) => ({
+                id: m.id,
+                title: m.title,
+                releaseYear: m.release_date ? m.release_date.split("-")[0] : "N/A",
+                poster: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : null,
+                rating: m.vote_average,
+                description: m.overview,
+            }));
+
+        res.status(200).send(results);
+    } catch (error) {
+        console.error("TMDB search error:", error);
+        res.status(500).send({ error: "An internal server error occurred" });
+    }
+});
+
+// Adds a requested movie to the DB
+router.post("/movies/request", async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id) return res.status(400).send({ error: "No movie ID provided" });
+
+        // Check if already in DB
+        const existing = await db.collection("Movies").findOne({ id: Number(id) });
+        if (existing) return res.status(409).send({ error: "Movie already in the vault" });
+
+        const keyDoc = await db.collection("Keys").findOne({ name: "tmdb" });
+        if (!keyDoc) return res.status(500).send({ error: "TMDB API key not found" });
+        const API_KEY = keyDoc.value;
+        const BASE_URL = "https://api.themoviedb.org/3";
+        const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
+
+        // Fetch full movie details
+        const [detailRes, creditsRes] = await Promise.all([
+            fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`),
+            fetch(`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`)
+        ]);
+        const details = await detailRes.json();
+        const credits = await creditsRes.json();
+        const director = credits.crew?.find((p) => p.job === "Director")?.name || "Unknown";
+
+        const movie = {
+            id: details.id,
+            title: details.title,
+            description: details.overview,
+            rating: details.vote_average,
+            voteCount: details.vote_count,
+            genres: details.genres?.map((g) => g.name) || [],
+            director,
+            poster: details.poster_path ? `${IMAGE_BASE}${details.poster_path}` : null,
+            releaseYear: details.release_date ? details.release_date.split("-")[0] : "N/A",
+            releaseDate: details.release_date,
+            createdAt: new Date(),
+        };
+
+        await db.collection("Movies").insertOne(movie);
+        res.status(201).send({ message: `"${movie.title}" has been added to the vault!`, movie });
+    } catch (error) {
+        console.error("Movie request error:", error);
+        res.status(500).send({ error: "An internal server error occurred" });
+    }
+});
+
+
 router.put("/movies/update", async (req, res) => {
     const BASE_URL = "https://api.themoviedb.org/3";
     const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
