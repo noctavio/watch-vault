@@ -57,7 +57,7 @@ router.get("/movies/tmdb-search", async (req, res) => {
         const query = req.query.q?.trim();
         if (!query) return res.status(400).send({ error: "No search query provided" });
 
-        const keyDoc = await db.collection("Keys").findOne({ name: "tmdb" });
+        const keyDoc = await db.collection("Keys").findOne({ name: "TMDB" });
         if (!keyDoc) return res.status(500).send({ error: "TMDB API key not found" });
 
         const API_KEY = keyDoc.value;
@@ -96,7 +96,7 @@ router.post("/movies/request", async (req, res) => {
         const existing = await db.collection("Movies").findOne({ id: Number(id) });
         if (existing) return res.status(409).send({ error: "Movie already in the vault" });
 
-        const keyDoc = await db.collection("Keys").findOne({ name: "tmdb" });
+        const keyDoc = await db.collection("Keys").findOne({ name: "TMDB" });
         if (!keyDoc) return res.status(500).send({ error: "TMDB API key not found" });
         const API_KEY = keyDoc.value;
         const BASE_URL = "https://api.themoviedb.org/3";
@@ -132,7 +132,6 @@ router.post("/movies/request", async (req, res) => {
         res.status(500).send({ error: "An internal server error occurred" });
     }
 });
-
 
 router.put("/movies/update", async (req, res) => {
     const BASE_URL = "https://api.themoviedb.org/3";
@@ -217,18 +216,18 @@ router.put("/movies/update", async (req, res) => {
                     filter: { id: movie.id },
                     update: {
                         $set: {
-                            id:       movie.id,
-                            title:        movie.title,
-                            description:  movie.overview,
-                            rating:       movie.vote_average,
-                            voteCount:    movie.vote_count,
-                            genres:       movie.genre_ids.map((id) => genreMap[id] || "Unknown"),
+                            id: movie.id,
+                            title: movie.title,
+                            description: movie.overview,
+                            rating: movie.vote_average,
+                            voteCount: movie.vote_count,
+                            genres: movie.genre_ids.map((id) => genreMap[id] || "Unknown"),
                             director,
-                            poster:       movie.poster_path   ? `${IMAGE_BASE}${movie.poster_path}`   : null,
+                            poster: movie.poster_path   ? `${IMAGE_BASE}${movie.poster_path}`   : null,
                             backdropPath: movie.backdrop_path ? `${IMAGE_BASE}${movie.backdrop_path}` : null,
-                            releaseYear:  movie.release_date  ? movie.release_date.split("-")[0]      : "N/A",
-                            releaseDate:  movie.release_date,
-                            updatedAt:    new Date(),
+                            releaseYear: movie.release_date  ? movie.release_date.split("-")[0]      : "N/A",
+                            releaseDate: movie.release_date,
+                            updatedAt: new Date(),
                         },
                         $setOnInsert: { createdAt: new Date() },
                     },
@@ -282,19 +281,19 @@ router.put("/movies/update", async (req, res) => {
                     { id: doc.id },
                     {
                         $set: {
-                            title:        details.title,
-                            description:  details.overview,
-                            rating:       details.vote_average,
-                            voteCount:    details.vote_count,
-                            genres:       details.genres ? details.genres.map((g) => g.name) : [],
+                            title: details.title,
+                            description: details.overview,
+                            rating: details.vote_average,
+                            voteCount: details.vote_count,
+                            genres: details.genres ? details.genres.map((g) => g.name) : [],
                             director,
-                            poster:       details.poster_path   ? `${IMAGE_BASE}${details.poster_path}`   : null,
+                            poster: details.poster_path   ? `${IMAGE_BASE}${details.poster_path}`   : null,
                             backdropPath: details.backdrop_path ? `${IMAGE_BASE}${details.backdrop_path}` : null,
-                            releaseYear:  details.release_date  ? details.release_date.split("-")[0]      : "N/A",
-                            releaseDate:  details.release_date,
-                            runtime:      details.runtime,
-                            status:       details.status,
-                            updatedAt:    new Date(),
+                            releaseYear: details.release_date  ? details.release_date.split("-")[0]      : "N/A",
+                            releaseDate: details.release_date,
+                            runtime: details.runtime,
+                            status: details.status,
+                            updatedAt: new Date(),
                         },
                     }
                 );

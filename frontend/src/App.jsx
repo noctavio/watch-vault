@@ -8,6 +8,8 @@ import Admin from './components/Admin.jsx';
 import ByPassLogin from './components/AdminByPassLogin.jsx';
 import Watchlist from './components/Watchlist.jsx';
 import MovieRequest from './components/MovieRequest.jsx';
+import CreateReviews from './components/CreateReviews.jsx';
+import Reviews from './components/Reviews.jsx';
 
 export default function App(){
     return (
@@ -22,10 +24,10 @@ export default function App(){
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/movierequest" element={<MovieRequest />} />
+            <Route path="/reviews" element={<Reviews/>} />
+            <Route path="/create_review" element={<CreateReviews />} />
             {/*
             <Route path="/recommendations" element={<Recommendations />} />
-            <Route path="/movie_detail" element={<MovieDetail/>} />
-            <Route path="/review_rating" element={<ReviewRating />} />
             <
             */}
         </Routes>

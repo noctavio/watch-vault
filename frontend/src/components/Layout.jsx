@@ -19,9 +19,9 @@ export default function Layout({ children }) {
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto">
-                                <Nav.Link as={NavLink} to="/" className={navLinkClass} end>Home</Nav.Link>
                                 <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
-                                <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Your Recommendations</Nav.Link>
+                                <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Recommendations</Nav.Link>
+                                <Nav.Link as={NavLink} to="/create_review" className={navLinkClass}>Write a Review</Nav.Link>
                                 {isLogin(user) ? (
                                     <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
                                 ) : (

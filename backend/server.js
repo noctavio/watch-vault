@@ -11,13 +11,15 @@ const host = "localhost";
 
 const userRoutes = require("./api/Users.js");
 const watchlistRoutes = require("./api/Watchlist.js");
-const searchRouter = require("./api/Movies.js");
+const searchRoutes = require("./api/Movies.js");
 const keyRoutes = require("./api/Keys.js");
+const reviewRoutes = require("./api/Reviews.js");
 
 app.use("/api", userRoutes);
 app.use("/api", watchlistRoutes);
 app.use("/api", keyRoutes)
-app.use('/api', searchRouter);
+app.use('/api', searchRoutes);
+app.use('/api', reviewRoutes);
 
 client.connect().then(() => {
     console.log("Connected to MongoDB");
