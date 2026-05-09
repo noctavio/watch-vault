@@ -6,6 +6,8 @@ const IMAGE_BASE = "https://image.tmdb.org/t/p/w500"; // w500 = good quality, no
 const TOTAL_MOVIES = 1000;
 const MOVIES_PER_PAGE = 20;
 const TOTAL_PAGES = TOTAL_MOVIES / MOVIES_PER_PAGE; // 50 pages
+
+// potentially remove changes done to this script later, since we have live api now, this could be backup?
  
 // Pause between requests so we don't hammer the API
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));

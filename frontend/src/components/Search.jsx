@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, NavLink, useNavigate } from 'react-router-dom';
 import { Container, Spinner, Alert, Card, Button } from 'react-bootstrap';
 import Layout from './Layout.jsx';
 import { UserContext } from './User';
 
 export default function Search() {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('q') || '';
     const page = parseInt(searchParams.get('page') || '1');
@@ -93,9 +94,21 @@ export default function Search() {
                 )}
 
                 {!loading && !error && movies.length === 0 && (
-                    <Alert variant="warning">
-                        No movies found for "{query}". Try a different search term.
-                    </Alert>
+                    <>
+                        <Alert variant="warning">
+                            No movies found for "{query}". Try a different search term.
+                        </Alert>
+
+                        {user?.role === 'admin' && (
+                          <div className="text-center mt-2">
+                            <p style={{ color: '#D4D2E0' }}>Can't find what you're looking for?</p>
+                            <Button onClick={() => navigate('/movierequest')}>
+                                Request a Movie
+                            </Button> 
+                        </div>          
+                        )}
+        
+                    </>
                 )}
 
                 {/* Card Grid */}
@@ -110,11 +123,9 @@ export default function Search() {
                                         alt={movie.title}
                                         className="movie-poster"
                                     />
-                                    {/* Genre — top left */}
                                     {movie.genres?.[0] && (
                                         <span className="genre-overlay">{movie.genres[0]}</span>
                                     )}
-                                    {/* Rating — top right */}
                                     <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
                                 </div>
                                 <Card.Body className="p-2">
