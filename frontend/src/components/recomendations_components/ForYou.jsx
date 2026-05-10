@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Container, Carousel, Alert, Button, Card } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../User.jsx';
 
 const GENRE_ID_MAP = {
@@ -74,6 +75,7 @@ export default function ForYou() {
     const [alert, setAlert] = useState(null);
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [movies, setMovies] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -149,15 +151,67 @@ export default function ForYou() {
                     activeIndex={carouselIndex}
                     onSelect={(index) => setCarouselIndex(index)}
                     indicators={slides.length > 1}
+                    className="pb-5"
                 >
                     {slides.map((group, i) => (
                         <Carousel.Item key={i}>
                             <div
                                 className="d-flex justify-content-center gap-3 py-3"
-                                style={{ minHeight: "420px" }}
+                                style={{
+                                    minHeight: "420px",
+                                    paddingBottom: "50px",
+                                }}
                             >
                                 {group.map((movie) => (
-                                    <MovieCard key={movie.id} movie={movie} onAdd={addToWatchlist} />
+                                    <Card
+                                        key={movie.id}
+                                        style={{
+                                            width: "200px",
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                        <div
+                                            className="poster-wrap"
+                                            onClick={() => navigate(`/reviews/${movie.id}`)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <Card.Img
+                                                variant="top"
+                                                src={movie.poster || 'https://placehold.co/200x300?text=No+Image'}
+                                                alt={movie.title}
+                                                className="movie-poster"
+                                            />
+                                            {movie.genres?.[0] && (
+                                                <span className="genre-overlay">{movie.genres[0]}</span>
+                                            )}
+                                            <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
+                                        </div>
+
+                                        <Card.Body className="p-2">
+                                            <Card.Title
+                                                className="mb-0"
+                                                style={{ fontSize: '0.8rem' }}
+                                            >
+                                                {movie.title}
+                                            </Card.Title>
+
+                                            <Card.Subtitle
+                                                style={{
+                                                    fontSize: '0.72rem',
+                                                    marginTop: '2px',
+                                                }}
+                                            >
+                                                {movie.director} · {movie.releaseYear}
+                                            </Card.Subtitle>
+
+                                            <Button
+                                                className="mt-2 w-100"
+                                                onClick={() => addToWatchlist(movie)}
+                                            >
+                                                Add to Watchlist
+                                            </Button>
+                                        </Card.Body>
+                                    </Card>
                                 ))}
                             </div>
                         </Carousel.Item>

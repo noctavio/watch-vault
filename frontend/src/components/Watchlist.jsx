@@ -116,10 +116,14 @@ export default function Watchlist() {
                                         flexShrink: 0,
                                     }}
                                 >
-                                    <div className="poster-wrap">
+                                    <div
+                                        className="poster-wrap"
+                                        onClick={() => navigate(`/reviews/${movie.id}`)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
                                         <Card.Img
                                             variant="top"
-                                            src={movie.poster || movie.poster_path || 'https://placehold.co/200x300?text=No+Image'}
+                                            src={movie.poster || 'https://placehold.co/200x300?text=No+Image'}
                                             alt={movie.title}
                                             className="movie-poster"
                                         />

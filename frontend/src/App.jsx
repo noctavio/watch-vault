@@ -26,7 +26,7 @@ export default function App(){
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/movierequest" element={<MovieRequest />} />
-            <Route path="/reviews" element={<Reviews/>} />
+            <Route path="/reviews/:movieId" element={<Reviews/>} /> {/* each movie has a unique review page*/}
             <Route path="/create_review" element={<CreateReviews />} />
         </Routes>
     </>

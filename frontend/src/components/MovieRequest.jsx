@@ -3,12 +3,12 @@ import { Container, Card, Button, Form, Spinner, Alert } from 'react-bootstrap';
 import Layout from './Layout.jsx';
 
 export default function MovieRequest() {
-    const [query, setQuery]    = useState('');
-    const [results, setResults]  = useState([]);
-    const [loading, setLoading]  = useState(false);
-    const [adding, setAdding]   = useState(null); 
-    const [message, setMessage]  = useState(null);  
-    const [error, setError]    = useState(null);
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [adding, setAdding] = useState(null); 
+    const [message, setMessage] = useState(null);  
+    const [error, setError]  = useState(null);
     const lastSearch = useRef(0); 
 
     const handleSearch = async (e) => {

@@ -71,6 +71,23 @@ export default function Search() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const handleDeleteMovie = async (e, movie) => { 
+        e.stopPropagation();
+        if (!window.confirm(`Remove "${movie.title}" from the vault?`)) return;
+        try {
+            const res = await fetch('/api/movies/remove', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: movie.id }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error);
+            setMovies((prev) => prev.filter((m) => m.id !== movie.id));
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
     return (
         <Layout>
             <Container fluid className="px-4 py-4">
@@ -116,7 +133,11 @@ export default function Search() {
                     <div className="search-grid">
                         {movies.map((movie) => (
                             <Card key={movie.id}>
-                                <div className="poster-wrap">
+                                <div
+                                    className="poster-wrap"
+                                    onClick={() => navigate(`/reviews/${movie.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <Card.Img
                                         variant="top"
                                         src={movie.poster || 'https://placehold.co/200x300?text=No+Image'}
@@ -127,6 +148,24 @@ export default function Search() {
                                         <span className="genre-overlay">{movie.genres[0]}</span>
                                     )}
                                     <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
+
+                                    {/*Admin only delete button */}
+                                    {user?.role === 'admin' && (
+                                        <button
+                                            onClick={(e) => handleDeleteMovie(e, movie)}
+                                            style={{
+                                                position: 'absolute', bottom: '6px', right: '6px',
+                                                width: '26px', height: '26px',
+                                                background: '#A8293E', border: 'none', borderRadius: '4px',
+                                                color: '#fff', fontWeight: 700, fontSize: '0.85rem',
+                                                cursor: 'pointer', lineHeight: 1,
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            }}
+                                            title="Remove from vault"
+                                        >
+                                            X
+                                        </button>
+                                    )}
                                 </div>
                                 <Card.Body className="p-2">
                                     <Card.Title className="mb-0" style={{ fontSize: '0.8rem' }}>
