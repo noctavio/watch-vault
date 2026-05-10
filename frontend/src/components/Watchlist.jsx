@@ -98,15 +98,28 @@ export default function Watchlist() {
                 )}
 
                 {!loading && !error && watchlist.length > 0 && (
-                    <div className="search-grid">
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "1rem",
+                        }}
+                    >
                         {watchlist.map((movie) => {
                             const watched = itemsChecked.includes(movie.id);
                             return (
-                                <Card key={movie.id} style={{ width: '200px', opacity: watched ? 0.6 : 1 }}>
+                                <Card
+                                    key={movie.id}
+                                    style={{
+                                        width: "200px",
+                                        opacity: watched ? 0.6 : 1,
+                                        flexShrink: 0,
+                                    }}
+                                >
                                     <div className="poster-wrap">
                                         <Card.Img
                                             variant="top"
-                                            src={movie.poster || 'https://placehold.co/200x300?text=No+Image'}
+                                            src={movie.poster || movie.poster_path || 'https://placehold.co/200x300?text=No+Image'}
                                             alt={movie.title}
                                             className="movie-poster"
                                         />

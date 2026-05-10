@@ -36,7 +36,7 @@ export default function Layout({ children }) {
                 </Navbar>
             </header>
             <main>{children}</main>
-            <footer className="fixed-bottom">
+            <footer>
                 <Container>
                     <Row>
                         <Col sm={6}>

@@ -10,11 +10,13 @@ import Watchlist from './components/Watchlist.jsx';
 import MovieRequest from './components/MovieRequest.jsx';
 import CreateReviews from './components/CreateReviews.jsx';
 import Reviews from './components/Reviews.jsx';
+import Recommendations from './components/Recommendations.jsx';
 
 export default function App(){
     return (
     <>
         <Routes>
+            <Route path="/recommendations" element={<Recommendations />} />
             <Route path='/watchlist' element={<Watchlist/>} />
             <Route path='/adminpage' element={<Admin />} />
             <Route path="/login" element={<Login />} />
@@ -26,10 +28,6 @@ export default function App(){
             <Route path="/movierequest" element={<MovieRequest />} />
             <Route path="/reviews" element={<Reviews/>} />
             <Route path="/create_review" element={<CreateReviews />} />
-            {/*
-            <Route path="/recommendations" element={<Recommendations />} />
-            <
-            */}
         </Routes>
     </>
     );

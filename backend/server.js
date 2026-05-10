@@ -14,12 +14,14 @@ const watchlistRoutes = require("./api/Watchlist.js");
 const searchRoutes = require("./api/Movies.js");
 const keyRoutes = require("./api/Keys.js");
 const reviewRoutes = require("./api/Reviews.js");
+const recommendationsRoutes = require("./api/Recommendations.js");
 
 app.use("/api", userRoutes);
 app.use("/api", watchlistRoutes);
 app.use("/api", keyRoutes)
 app.use('/api', searchRoutes);
 app.use('/api', reviewRoutes);
+app.use('/api', recommendationsRoutes);
 
 client.connect().then(() => {
     console.log("Connected to MongoDB");
