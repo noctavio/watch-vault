@@ -40,7 +40,7 @@ export default function Recommendations(){
         <>
             <Layout>
                 <div className="d-flex justify-content-center align-items-center min-vh-100">
-                    <Card className="p-4 text-center" style={{ maxWidth: "600", width: "100%" }}>
+                    <Card className="p-3 text-center" style={{ width: "100%", backgroundColor: "#13111A"}}>
                         <Card.Header><Card.Title>Your Recommendations</Card.Title></Card.Header>
                         <Card.Body>
                             <Card className="p-3 w-100">
