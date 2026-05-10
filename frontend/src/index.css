@@ -12,6 +12,12 @@ h2{
     color: #C9A84C;
 }
 
+h5{
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    color: #C9A84C;
+}
+
 #authorImage{
    height: 600px;
 }
