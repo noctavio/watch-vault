@@ -133,6 +133,23 @@ router.post("/movies/request", async (req, res) => {
     }
 });
 
+// removes a movie from the localdb instance
+router.delete('/movies/remove', async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id) return res.status(400).send({ error: "Movie ID required" });
+
+        const result = await db.collection("Movies").deleteOne({ id: Number(id) });
+        if (result.deletedCount === 0) return res.status(404).send({ error: "Movie not found" });
+
+        res.status(200).send({ message: "Movie removed from the vault" });
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        res.status(500).send({ error: "An internal server error occurred" });
+    }
+});
+
+// octavio to alex, what does this do?
 router.put("/movies/update", async (req, res) => {
     const BASE_URL = "https://api.themoviedb.org/3";
     const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";

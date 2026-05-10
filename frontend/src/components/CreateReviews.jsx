@@ -137,7 +137,7 @@ export default function CreateReviews() {
                                         onChange={(e) => setSelectedMovie(e.target.value)}
                                         style={{ backgroundColor: '#2A2740', border: '1px solid #3D3960', color: '#F2F0FA' }}
                                     >
-                                        <option value="">— Select a watched movie —</option>
+                                        <option value="">= Select a watched movie =</option>
                                         {watchedMovies.map((movie) => (
                                             <option key={movie.id} value={movie.id}>
                                                 {movie.title} ({movie.releaseYear})
@@ -175,7 +175,7 @@ export default function CreateReviews() {
                                         onChange={(e) => setRating(e.target.value)}
                                         style={{ backgroundColor: '#2A2740', border: '1px solid #3D3960', color: '#F2F0FA' }}
                                     >
-                                        <option value="">— Select a rating —</option>
+                                        <option value="">= Select a rating =</option>
                                         {[10,9,8,7,6,5,4,3,2,1].map((n) => (
                                             <option key={n} value={n}>
                                                 {n} / 10 {n === 10 ? '- Masterpiece' : n >= 9 ? '-  Incredible' : 
@@ -211,17 +211,6 @@ export default function CreateReviews() {
                                     <Form.Text style={{ color: '#6c6a7e' }}>
                                         {description.length} / 2000
                                     </Form.Text>
-                                </Form.Group>
-
-                                <Form.Group className="mb-4">
-                                    <Form.Check
-                                        type="checkbox"
-                                        id="recommend-check"
-                                        label="I recommend this movie"
-                                        checked={recommend}
-                                        onChange={(e) => setRecommend(e.target.checked)}
-                                        style={{ color: '#D4D2E0' }}
-                                    />
                                 </Form.Group>
 
                                 <Button type="submit" className="w-100" disabled={submitting}>

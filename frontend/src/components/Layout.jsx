@@ -42,10 +42,10 @@ export default function Layout({ children }) {
                         <Col sm={6}>
                             <p>©Team AL_10</p>
                         </Col>
-                        <Col sm={6} className="text-end">
-                            <button onClick={scrollToTop} className="btn btn-link p-0">
+                        <Col sm={6} >
+                            <p className="back-to-top" onClick={scrollToTop}>
                                 Back to top
-                            </button>
+                            </p>
                         </Col>
                     </Row>
                 </Container>

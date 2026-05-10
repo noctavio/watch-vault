@@ -222,3 +222,15 @@ footer{
     gap: 20px;
     padding: 24px 0;
 }
+
+.back-to-top {
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        text-shadow 0.2s ease,
+        -webkit-text-stroke 0.2s ease;
+}
+
+.back-to-top:hover {
+    color: #C94060;
+}
