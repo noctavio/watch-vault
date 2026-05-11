@@ -8,8 +8,7 @@ Before submitting, update this README with:
 - `Octavio Munoz` - munozo@iastate.edu
 
 # Brief project description
-A movie watchlist website, allowers user to create accounts, add movies to watchlist, make reviews,
-and mark as watched to keep track and many more features.
+Watchvault is an app where users can view trending films, save their favorite movies, and create and view reviews by other users. Any user can create their own set of watched movies where they must set the individual status to watched to create a review. Admins can manually delete reviews they deem inappropriate and delete any film in the local database as well as request one through TMDB’s api. Every film on the app has its own individual review page which compiles and filters reviews through multiple pages; it incorporates a social feature through a like and dislike system.
 
 ## Setup instructions (if any)
 Open two terminals: first terminal run following commands
