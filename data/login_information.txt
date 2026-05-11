@@ -1,0 +1,6 @@
+Admin:
+    Email: mjohnson@iastate.edu
+    Pass: Admin@1234
+Users:
+    Email: tnguyen@iastate.edu
+    Pass: User@5678

@@ -4,9 +4,9 @@ import React, { useContext } from 'react';
 import { UserContext } from './User';
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
-import UserPermissions from './UserPermissions.jsx';
-import ApiKeys from './ApiKeys.jsx';
-import UpdateMovies from './UpdateMovies.jsx';
+import UserPermissions from './admin_components/UserPermissions.jsx';
+import ApiKeys from './admin_components/ApiKeys.jsx';
+import UpdateMovies from './admin_components/UpdateMovies.jsx';
 
 const isLogin = (aUser) => !aUser || Object.keys(aUser).length === 0;
 const isAdmin = (aUser) => aUser?.role === "admin";

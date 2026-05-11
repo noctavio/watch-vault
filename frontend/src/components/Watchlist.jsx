@@ -4,6 +4,10 @@ import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './User';
 import Layout from './Layout.jsx';
 
+const isLogin = (aUser) => {
+    return (aUser === null || aUser === undefined || Object.keys(aUser).length === 0);
+};
+
 export default function Watchlist() {
     const { user } = useContext(UserContext);
     const [watchlist, setWatchlist] = useState([]);
@@ -63,7 +67,7 @@ export default function Watchlist() {
         }
     };
 
-    if (!user) {
+    if (isLogin(user)) {
         return (
             <Layout>
                 <div className="d-flex justify-content-center align-items-center min-vh-100">
