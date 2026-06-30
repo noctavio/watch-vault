@@ -76,7 +76,7 @@ export default function Watchlist() {
                         <Card.Body>
                             <PersonCircle size={64} color="#C9A84C" className="mb-3" />
                             <Card.Title>Not Logged In</Card.Title>
-                            <p className="card-text mb-4">You need to be logged in to view your Recommendations.</p>
+                            <p className="card-text mb-4">You need to be logged in to view this page.</p>
                             <Button className="w-100" onClick={() => navigate("/login")}>
                                 Go to Login
                             </Button>
@@ -103,7 +103,7 @@ export default function Watchlist() {
                 )}
 
                 {!loading && !error && watchlist.length === 0 && (
-                    <p className="text-muted text-center">Your watchlist is empty.</p>
+                    <p className="text-center" style={{ color: '#DC3545' }}>NO RESULTS...</p>
                 )}
 
                 {!loading && !error && watchlist.length > 0 && (

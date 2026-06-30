@@ -253,7 +253,7 @@ export default function MoreLike() {
                 </Carousel>
             )}
             {!loading && !error && movies.length === 0 && (
-                <p className="text-muted">No movies found.</p>
+                <p className="text-center" style={{ color: '#DC3545' }}>No movies found.</p>
             )}
         </Container>
     );

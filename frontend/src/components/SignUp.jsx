@@ -79,7 +79,7 @@ export default function SignUp(){
                                     Create Account
                                 </Button>
                                 <Form.Group className="text-center">
-                                    <Form.Text className="me-1">Already have an Account?</Form.Text>
+                                    <Form.Text className="me-1" style={{ color: '#ffffff' }}>Already have an Account?</Form.Text>
                                     <NavLink to="/login">Login Here</NavLink>
                                 </Form.Group>
                             </Form>

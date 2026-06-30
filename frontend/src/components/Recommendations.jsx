@@ -25,7 +25,7 @@ export default function Recommendations(){
                         <Card.Body>
                             <PersonCircle size={64} color="#C9A84C" className="mb-3" />
                             <Card.Title>Not Logged In</Card.Title>
-                            <p className="card-text mb-4">You need to be logged in to view your Recommendations.</p>
+                            <p className="card-text mb-4">You need to be logged in to view this page.</p>
                             <Button className="w-100" onClick={() => navigate("/login")}>
                                 Go to Login
                             </Button>
