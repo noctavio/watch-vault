@@ -6,6 +6,8 @@ app.use(express.json())
 app.use(cors())
 var bodyParser = require("body-parser");
 
+require("dotenv").config();
+
 const port = 8080;
 const host = "localhost";
 

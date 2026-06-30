@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { db } = require("../db.js");
+require("dotenv").config();
 
-const BASE_URL = "https://api.themoviedb.org/3";
+const BASE_URL = process.env.VITE_BASE_URL;
 
 const GENRE_MAP = {
     Action: 28, Comedy: 35, Drama: 18, Horror: 27, Romance: 10749,

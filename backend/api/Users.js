@@ -1,8 +1,10 @@
+require("dotenv").config();
 const express = require('express');
 const router = express.Router();
 const { db } = require("../db.js");
 const bcrypt = require('bcrypt');
-const superSecretPas = "ILikeMovie123";
+
+const adminKey = process.env.ADMIN_KEY;
 
 router.post("/auth/login", async (req, res) => {
     if (!req.body || Object.keys(req.body).length === 0) {
@@ -35,7 +37,7 @@ router.post("/auth/admin/bypass/login", async (req, res) => {
     }
     try {
         const user = await db.collection("Users").findOne({ email: req.body.email });
-        const isMatch = req.body.password === superSecretPas;
+        const isMatch = req.body.password === adminKey;
         if (!isMatch) {
             return res.status(401).send({ error: 'Invalid credentials' });
         }

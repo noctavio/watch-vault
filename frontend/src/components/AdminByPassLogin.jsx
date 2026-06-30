@@ -38,8 +38,7 @@ export default function ByPassLogin(){
                 <div className="d-flex justify-content-center align-items-center min-vh-100">
                     <Card className="p-3" style={{ width: "100%", maxWidth: "400px" }}>
                         <Card.Header className="text-center border-0 bg-transparent pt-3">
-                            <PersonCircle size={64} />
-                            <Card.Title className="mt-2 mb-0">Admin Login</Card.Title>
+                            <Card.Title className="mt-2 mb-0" style={{ color: '#A8293E' }}>ADMIN Login</Card.Title>
                         </Card.Header>
                         <Card.Body>
                             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -53,7 +52,7 @@ export default function ByPassLogin(){
                                     {errors.email && <p className="text-danger small mt-1">Email is required</p>}
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formPassword">
-                                    <Form.Label>ADMIN Password</Form.Label>
+                                    <Form.Label>Admin key</Form.Label>
                                     <Form.Control
                                     {...register("password", { required: true })}
                                     type="password"
@@ -64,10 +63,6 @@ export default function ByPassLogin(){
                                 <Button variant="primary" type="submit" className="w-100 mb-3">
                                     Login
                                 </Button>
-                                <Form.Group className="text-center">
-                                    <Form.Text className="me-1">New here?</Form.Text>
-                                    <NavLink to="/signup">Sign Up</NavLink>
-                                </Form.Group>
                             </Form>
                         </Card.Body>
                     </Card>
