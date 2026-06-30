@@ -65,11 +65,10 @@ export default function Login(){
                                     Login
                                 </Button>
                                 <Form.Group className="text-center">
-                                    <Form.Text className="me-1">New here?</Form.Text>
+                                    <Form.Text className="me-1" style={{ color: '#ffffff' }}>New here?</Form.Text>
                                     <NavLink to="/signup">Sign Up</NavLink>
                                 </Form.Group>
                                 <Form.Group className="text-center">
-                                    <Form.Text className="me-1">Admin Login</Form.Text>
                                     <NavLink to="/adminlogin">Login as Admin</NavLink>
                                 </Form.Group>
                             </Form>

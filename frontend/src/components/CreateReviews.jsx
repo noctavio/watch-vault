@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './User';
 import Layout from './Layout.jsx';
+import { PersonCircle } from 'react-bootstrap-icons';
+
+const isLogin = (aUser) => {
+    return (aUser === null || aUser === undefined || Object.keys(aUser).length === 0);
+};
 
 export default function CreateReviews() {
     const { user } = useContext(UserContext);
@@ -20,10 +25,24 @@ export default function CreateReviews() {
     const [rating, setRating] = useState('');
     const [recommend, setRecommend] = useState(false);
 
-    useEffect(() => {
-        if (!user) { navigate('/login'); return; }
-        fetchWatchlist();
-    }, [user]);
+    if (isLogin(user)) {
+        return (
+            <Layout>
+                <div className="d-flex justify-content-center align-items-center min-vh-100">
+                    <Card className="p-4 text-center" style={{ maxWidth: "400px", width: "100%" }}>
+                        <Card.Body>
+                            <PersonCircle size={64} color="#C9A84C" className="mb-3" />
+                            <Card.Title>Not Logged In</Card.Title>
+                            <p className="card-text mb-4">You need to be logged in to view your Recommendations.</p>
+                            <Button className="w-100" onClick={() => navigate("/login")}>
+                                Go to Login
+                            </Button>
+                        </Card.Body>
+                    </Card>
+                </div>
+            </Layout>
+        );
+    }
 
     const fetchWatchlist = async () => {
         setLoading(true);
