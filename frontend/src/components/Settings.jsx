@@ -141,7 +141,7 @@ export default function Settings(){
                         <Card.Title className="mt-2">User Settings</Card.Title>
                     </Card.Header>
                         <Card.Body className="d-flex flex-column gap-3">
-                            <Card className="p-3 w-100">
+                            <Card>
                             <Card.Header><Card.Subtitle>Account Info</Card.Subtitle></Card.Header>
                             <Card.Body>
                                 <Form onSubmit={handleSubmit(changeAccountInfo)}>

@@ -188,13 +188,6 @@ export default function TopRated() {
                                         </div>
 
                                         <Card.Body className="p-2">
-                                            <Card.Title
-                                                className="mb-0"
-                                                style={{ fontSize: '0.8rem' }}
-                                            >
-                                                {movie.title}
-                                            </Card.Title>
-
                                             <Card.Subtitle
                                                 style={{
                                                     fontSize: '0.72rem',

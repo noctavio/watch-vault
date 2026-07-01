@@ -194,7 +194,7 @@ export default function CreateReviews() {
                                 })()}
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Rating</Form.Label>
+                                    <Form.Label>Rating*</Form.Label>
                                     <Form.Select
                                         value={rating}
                                         onChange={(e) => setRating(e.target.value)}
@@ -213,7 +213,7 @@ export default function CreateReviews() {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Review Title</Form.Label>
+                                    <Form.Label>Review Title*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Summarize your thoughts..."
@@ -221,10 +221,13 @@ export default function CreateReviews() {
                                         onChange={(e) => setTitle(e.target.value)}
                                         maxLength={100}
                                     />
+                                    <Form.Text style={{ color: '#6c6a7e' }}>
+                                        {title.length} / 100
+                                    </Form.Text>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Review</Form.Label>
+                                    <Form.Label>Review*</Form.Label>
                                     <Form.Control
                                         as="textarea"
                                         rows={5}
