@@ -6,6 +6,9 @@ const bcrypt = require('bcrypt');
 
 const adminKey = process.env.ADMIN_KEY;
 
+const jwt = require("jsonwebtoken");
+const SECRET = process.env.JWT_SECRET;
+
 router.post("/auth/login", async (req, res) => {
     if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).send({ error: 'Bad request: No data provided' });
@@ -16,7 +19,15 @@ router.post("/auth/login", async (req, res) => {
         if (!isMatch) {
             return res.status(401).send({ error: 'Invalid credentials' });
         }
+
+        const token = jwt.sign(
+            { userId: user.userId, role: user.role, email: user.email },
+            SECRET,
+            { expiresIn: "7d" }
+        );
+
         res.status(200).send({
+            token,                  
             _id: user._id,
             userId: user.userId,
             username: user.username,

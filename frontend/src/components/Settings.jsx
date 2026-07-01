@@ -38,7 +38,8 @@ export default function Settings(){
 
     const logOut = () => {
         if(confirm("Do you wish to Log Out?")){
-            setUser({});
+            localStorage.removeItem("token"); // add this
+            setUser(null);
             alert("Successfully Logged Out!");
             navigate("/");
         }
