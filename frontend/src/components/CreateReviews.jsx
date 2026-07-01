@@ -25,6 +25,28 @@ export default function CreateReviews() {
     const [rating, setRating] = useState('');
     const [recommend, setRecommend] = useState(false);
 
+    const fetchWatchlist = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+        const res = await fetch(`/api/watchlist/${user.watchlistId}`);
+        if (!res.ok) throw new Error("Failed to fetch watchlist.");
+        const data = await res.json();
+        setWatchlist(data.items ?? []);
+        setItemsChecked(data.itemsChecked ?? []);
+    } catch (err) {
+        setError(err.message);
+    } finally {
+        setLoading(false);
+    }
+};
+
+    useEffect(() => {
+    if (user?.watchlistId) {
+        fetchWatchlist();
+    }
+}, [user]);
+
     if (isLogin(user)) {
         return (
             <Layout>
@@ -44,30 +66,10 @@ export default function CreateReviews() {
         );
     }
 
-    const fetchWatchlist = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await fetch(`/api/watchlist/${user.watchlistId}`);
-            if (!res.ok) throw new Error("Failed to fetch watchlist.");
-            const data = await res.json();
-            setWatchlist(data.items ?? []);
-            setItemsChecked(data.itemsChecked ?? []);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     // Only movies marked as watched are reviewable
     const watchedMovies = watchlist.filter((movie) =>
         itemsChecked.includes(movie.id)
     );
-
-    console.log("watchlist:", watchlist);
-    console.log("itemsChecked:", itemsChecked);
-    console.log("typeof itemsChecked[0]:", typeof itemsChecked[0]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

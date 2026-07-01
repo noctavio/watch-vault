@@ -235,7 +235,7 @@ export default function MoreLike() {
                                                     marginTop: '2px',
                                                 }}
                                             >
-                                                {movie.director} · {movie.releaseYear}
+                                                {movie.director} {movie.releaseYear}
                                             </Card.Subtitle>
 
                                             <Button
