@@ -30,44 +30,6 @@ const chunkArray = (arr, size) => {
     return chunks;
 };
 
-function MovieCard({ movie, onAdd }) {
-    return (
-        <Card style={{ width: "200px", flexShrink: 0 }}>
-            <div className="poster-wrap" style={{ position: "relative" }}>
-                <Card.Img
-                    variant="top"
-                    src={movie.poster || "https://placehold.co/200x300?text=No+Image"}
-                    alt={movie.title}
-                    className="movie-poster"
-                    style={{ height: "280px", objectFit: "cover" }}
-                />
-                {movie.genres?.[0] && (
-                    <span className="genre-overlay">{movie.genres[0]}</span>
-                )}
-                <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
-            </div>
-            <Card.Body className="p-2">
-                <Card.Title className="mb-0" style={{ fontSize: "0.8rem" }}>
-                    {movie.title}
-                </Card.Title>
-                <Card.Subtitle style={{ fontSize: "0.72rem", marginTop: "2px" }}>
-                    {movie.director ? `${movie.director} · ` : ""}{movie.releaseYear}
-                </Card.Subtitle>
-            </Card.Body>
-            <div className="p-2">
-                <Button
-                    size="sm"
-                    variant="primary"
-                    className="w-100"
-                    onClick={() => onAdd(movie)}
-                >
-                    + Watchlist
-                </Button>
-            </div>
-        </Card>
-    );
-}
-
 export default function MoreLike() {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
@@ -221,14 +183,14 @@ export default function MoreLike() {
                                             <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
                                         </div>
 
-                                        <Card.Body className="p-2">
+                                        <Card.Body className="p-2" style={{ textAlign: "left" }}>
                                             <Card.Subtitle
                                                 style={{
                                                     fontSize: '0.72rem',
                                                     marginTop: '2px',
                                                 }}
                                             >
-                                                {movie.director} {movie.releaseYear}
+                                                {movie.director} · {movie.releaseYear}
                                             </Card.Subtitle>
 
                                             <Button

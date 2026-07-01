@@ -17,6 +17,22 @@ const getTMDBKey = async () => {
     return result.value;
 };
 
+const attachDirectors = async (movies, apiKey) => {
+    return Promise.all(
+        movies.map(async (movie) => {
+            try {
+                const credits = await fetch(
+                    `${BASE_URL}/movie/${movie.id}/credits?api_key=${apiKey}`
+                ).then(r => r.json());
+                const director = credits.crew?.find(p => p.job === "Director")?.name ?? "";
+                return { ...movie, director };
+            } catch {
+                return { ...movie, director: "" };
+            }
+        })
+    );
+};
+
 router.get("/recommendations/fav_genre/movie/:id", async (req, res) => {
     try {
         const apiKey = await getTMDBKey();
@@ -41,6 +57,8 @@ router.get("/recommendations/fav_genre/movie/:id", async (req, res) => {
         const movies = await fetch(
             `${BASE_URL}/discover/movie?api_key=${apiKey}&sort_by=popularity.desc&with_genres=${genres}&vote_count.gte=200&vote_average.gte=6&page=1`,
         ).then((r) => r.json());
+
+        movies.results = await attachDirectors(movies.results, apiKey);
 
         return res.status(200).send(movies);
     } catch (error) {
@@ -74,7 +92,7 @@ router.get("/recommendations/discover/top_rated/movie/:id", async (req, res) => 
             `${BASE_URL}/discover/movie?api_key=${apiKey}&sort_by=vote_average.desc&vote_count.gte=200&vote_average.gte=6&with_genres=${genres}&page=1`,
         ).then((r) => r.json());
 
-        movies.results = movies.results.slice(0, 10);
+        movies.results = await attachDirectors(movies.results.slice(0, 10), apiKey); 
 
         return res.status(200).send(movies);
     } catch (error) {
@@ -106,6 +124,8 @@ router.get("/recommendations/movie/belongs_to_vault/:id", async (req, res) => {
             `${BASE_URL}/collection/${collectionId}?api_key=${apiKey}`,
         ).then((r) => r.json());
 
+        collection.parts = await attachDirectors(collection.parts ?? [], apiKey); // add this
+
         return res.status(200).send(collection);
     } catch (error) {
         console.error("Error fetching belongs_to_vault:", error);
@@ -125,6 +145,8 @@ router.get("/recommendations/movie/:id", async (req, res) => {
         const movies = await fetch(
             `${BASE_URL}/movie/${movieId}/recommendations?api_key=${apiKey}`,
         ).then((r) => r.json());
+
+        movies.results = await attachDirectors(movies.results, apiKey);
 
         return res.status(200).send(movies);
     } catch (error) {

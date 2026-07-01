@@ -174,10 +174,13 @@ export default function Search() {
                                     <Card.Subtitle style={{ fontSize: '0.72rem', marginTop: '2px' }}>
                                         {movie.director} · {movie.releaseYear}
                                     </Card.Subtitle>
+                                    <Button
+                                        className="mt-2 w-100"
+                                        onClick={() => addToWatchlist(movie)}
+                                    >
+                                        Add to Watchlist
+                                    </Button>
                                 </Card.Body>
-                                <Button onClick={() => addToWatchlist(movie)}>
-                                    Add to Watchlist
-                                </Button>
                             </Card>
                         ))}
                     </div>
