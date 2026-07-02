@@ -5,11 +5,24 @@ import { UserContext } from './User';
 
 export default function Layout({ children }) {
     const { user, setUser } = useContext(UserContext);
-    const isLogin = (aUser) => {
-        return (aUser === null || aUser === undefined || Object.keys(aUser).length === 0)
+    const isLoggedIn = (aUser) => {
+        return (
+            aUser !== null &&
+            aUser !== undefined &&
+            Object.keys(aUser).length > 0
+        );
     };
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
     const navLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link'
+
+    const logOut = () => {
+        if (window.confirm("Do you wish to Log Out?")) {
+            localStorage.removeItem("token");
+            setUser(null);
+            alert("Successfully Logged Out!");
+            navigate("/");
+        }
+    };
     return (
         <>
             <header>
@@ -22,13 +35,18 @@ export default function Layout({ children }) {
                                 <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
                                 <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Recommendations</Nav.Link>
                                 <Nav.Link as={NavLink} to="/create_review" className={navLinkClass}>Write a Review</Nav.Link>
-                                {isLogin(user) ? (
+                                {!isLoggedIn(user) ? (
                                     <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
                                 ) : (
-                                    <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>{user.username}</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>{user?.username}</Nav.Link>
                                 )}
                                 {user?.role === 'admin' && (
                                     <Nav.Link as={NavLink} to="/adminpage" className={navLinkClass}>Admin Controls</Nav.Link>
+                                )}
+                                {isLoggedIn(user) && (
+                                    <Nav.Link onClick={logOut}>
+                                        Logout
+                                    </Nav.Link>
                                 )}
                             </Nav>
                         </Navbar.Collapse>

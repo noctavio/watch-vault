@@ -69,7 +69,7 @@ export default function Home() {
 
     const [movies, setMovies] = useState([]);
     const [carouselIndex, setCarouselIndex] = useState(0);
-    const [alert, setAlert] = useState(null);
+    const [alert, setAlertMessage] = useState(null);
     const [loadingMovies, setLoadingMovies] = useState(true);
 
     useEffect(() => {
@@ -184,7 +184,7 @@ export default function Home() {
                     <h2>Browse Our Movies Selection</h2>
 
                     {alert && (
-                        <Alert variant={alert.type} onClose={() => setAlert(null)} dismissible>
+                        <Alert variant={alert.type} onClose={() => setAlertMessage(null)} dismissible>
                             {alert.message}
                         </Alert>
                     )}
@@ -234,13 +234,6 @@ export default function Home() {
                                                 </div>
 
                                                 <Card.Body className="p-2">
-                                                    <Card.Title
-                                                        className="mb-0"
-                                                        style={{ fontSize: '0.8rem' }}
-                                                    >
-                                                        {movie.title}
-                                                    </Card.Title>
-
                                                     <Card.Subtitle
                                                         style={{
                                                             fontSize: '0.72rem',

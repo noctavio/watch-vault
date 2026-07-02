@@ -25,6 +25,28 @@ export default function CreateReviews() {
     const [rating, setRating] = useState('');
     const [recommend, setRecommend] = useState(false);
 
+    const fetchWatchlist = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+        const res = await fetch(`/api/watchlist/${user.watchlistId}`);
+        if (!res.ok) throw new Error("Failed to fetch watchlist.");
+        const data = await res.json();
+        setWatchlist(data.items ?? []);
+        setItemsChecked(data.itemsChecked ?? []);
+    } catch (err) {
+        setError(err.message);
+    } finally {
+        setLoading(false);
+    }
+};
+
+    useEffect(() => {
+    if (user?.watchlistId) {
+        fetchWatchlist();
+    }
+}, [user]);
+
     if (isLogin(user)) {
         return (
             <Layout>
@@ -33,7 +55,7 @@ export default function CreateReviews() {
                         <Card.Body>
                             <PersonCircle size={64} color="#C9A84C" className="mb-3" />
                             <Card.Title>Not Logged In</Card.Title>
-                            <p className="card-text mb-4">You need to be logged in to view your Recommendations.</p>
+                            <p className="card-text mb-4">You need to be logged in to view this page.</p>
                             <Button className="w-100" onClick={() => navigate("/login")}>
                                 Go to Login
                             </Button>
@@ -43,22 +65,6 @@ export default function CreateReviews() {
             </Layout>
         );
     }
-
-    const fetchWatchlist = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await fetch(`/api/watchlist/${user.watchlistId}`);
-            if (!res.ok) throw new Error("Failed to fetch watchlist.");
-            const data = await res.json();
-            setWatchlist(data.items ?? []);
-            setItemsChecked(data.itemsChecked ?? []);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // Only movies marked as watched are reviewable
     const watchedMovies = watchlist.filter((movie) =>
@@ -188,7 +194,7 @@ export default function CreateReviews() {
                                 })()}
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Rating</Form.Label>
+                                    <Form.Label>Rating*</Form.Label>
                                     <Form.Select
                                         value={rating}
                                         onChange={(e) => setRating(e.target.value)}
@@ -207,7 +213,7 @@ export default function CreateReviews() {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Review Title</Form.Label>
+                                    <Form.Label>Review Title*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Summarize your thoughts..."
@@ -215,10 +221,13 @@ export default function CreateReviews() {
                                         onChange={(e) => setTitle(e.target.value)}
                                         maxLength={100}
                                     />
+                                    <Form.Text style={{ color: '#6c6a7e' }}>
+                                        {title.length} / 100
+                                    </Form.Text>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Review</Form.Label>
+                                    <Form.Label>Review*</Form.Label>
                                     <Form.Control
                                         as="textarea"
                                         rows={5}

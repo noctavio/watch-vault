@@ -1,8 +1,9 @@
+require("dotenv").config();
 const fs = require("fs");
- 
-const API_KEY = "57abe25a4cd0178a094bc72c1d886e7e"; // api key
-const BASE_URL = "https://api.themoviedb.org/3";
-const IMAGE_BASE = "https://image.tmdb.org/t/p/w500"; // w500 = good quality, not too large
+
+const API_KEY = process.env.VITE_API_KEY;
+const BASE_URL = process.env.VITE_BASE_URL;
+const IMAGE_BASE = process.env.VITE_IMAGE_BASE;
 const TOTAL_MOVIES = 1000;
 const MOVIES_PER_PAGE = 20;
 const TOTAL_PAGES = TOTAL_MOVIES / MOVIES_PER_PAGE; // 50 pages

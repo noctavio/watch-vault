@@ -1,3 +1,12 @@
+main {
+    animation: fadeIn 0.35s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 html, body {
     overflow-x: hidden; max-width: 100%;
 }
@@ -121,8 +130,8 @@ h5{
 .btn-warning:hover,
 .btn-warning:focus,
 .btn-warning:active {
-    background-color: #e0bc6e;
-    border-color: #e0bc6e;
+    background-color: #A8293E;
+    border-color: #A8293E;
     color: #13111A;
 }
 

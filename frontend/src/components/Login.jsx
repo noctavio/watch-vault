@@ -22,9 +22,10 @@ export default function Login(){
             if(!response.ok){
                 alert("Invalid Email or Password");
             } else {
-                alert("Login Successful");
                 const json = await response.json();
+                localStorage.setItem("token", json.token); 
                 setUser(json);
+                alert("Login Successful");
                 navigate("/");
             }
         }catch(error){
@@ -67,9 +68,6 @@ export default function Login(){
                                 <Form.Group className="text-center">
                                     <Form.Text className="me-1" style={{ color: '#ffffff' }}>New here?</Form.Text>
                                     <NavLink to="/signup">Sign Up</NavLink>
-                                </Form.Group>
-                                <Form.Group className="text-center">
-                                    <NavLink to="/adminlogin">Login as Admin</NavLink>
                                 </Form.Group>
                             </Form>
                         </Card.Body>

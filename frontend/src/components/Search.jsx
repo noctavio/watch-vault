@@ -168,16 +168,21 @@ export default function Search() {
                                     )}
                                 </div>
                                 <Card.Body className="p-2">
-                                    <Card.Title className="mb-0" style={{ fontSize: '0.8rem' }}>
-                                        {movie.title}
+                                    <Card.Title className="mb-0" style={{ fontSize: "0.8rem" }}>
+                                        {movie.title.length > 28
+                                            ? `${movie.title.slice(0, 28)}...`
+                                            : movie.title}
                                     </Card.Title>
                                     <Card.Subtitle style={{ fontSize: '0.72rem', marginTop: '2px' }}>
                                         {movie.director} · {movie.releaseYear}
                                     </Card.Subtitle>
+                                    <Button
+                                        className="mt-2 w-100"
+                                        onClick={() => addToWatchlist(movie)}
+                                    >
+                                        Add to Watchlist
+                                    </Button>
                                 </Card.Body>
-                                <Button onClick={() => addToWatchlist(movie)}>
-                                    Add to Watchlist
-                                </Button>
                             </Card>
                         ))}
                     </div>

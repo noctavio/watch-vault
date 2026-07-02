@@ -30,44 +30,6 @@ const chunkArray = (arr, size) => {
     return chunks;
 };
 
-function MovieCard({ movie, onAdd }) {
-    return (
-        <Card style={{ width: "200px", flexShrink: 0 }}>
-            <div className="poster-wrap" style={{ position: "relative" }}>
-                <Card.Img
-                    variant="top"
-                    src={movie.poster || "https://placehold.co/200x300?text=No+Image"}
-                    alt={movie.title}
-                    className="movie-poster"
-                    style={{ height: "280px", objectFit: "cover" }}
-                />
-                {movie.genres?.[0] && (
-                    <span className="genre-overlay">{movie.genres[0]}</span>
-                )}
-                <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
-            </div>
-            <Card.Body className="p-2">
-                <Card.Title className="mb-0" style={{ fontSize: "0.8rem" }}>
-                    {movie.title}
-                </Card.Title>
-                <Card.Subtitle style={{ fontSize: "0.72rem", marginTop: "2px" }}>
-                    {movie.director ? `${movie.director} · ` : ""}{movie.releaseYear}
-                </Card.Subtitle>
-            </Card.Body>
-            <div className="p-2">
-                <Button
-                    size="sm"
-                    variant="primary"
-                    className="w-100"
-                    onClick={() => onAdd(movie)}
-                >
-                    + Watchlist
-                </Button>
-            </div>
-        </Card>
-    );
-}
-
 export default function ForYou() {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
@@ -88,6 +50,17 @@ export default function ForYou() {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || "Failed to fetch recommendations.");
                 const normalized = (data.results || []).map(normalizeMovie);
+
+                await Promise.all(
+                    normalized.map((movie) =>
+                        fetch(`http://localhost:8080/api/movies/request`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ id: movie.id }),
+                        }).catch(() => {}) // ignore movies alread in localdb
+                    )
+                );
+
                 setMovies(normalized);
             } catch (err) {
                 setError(err.message);
@@ -113,7 +86,7 @@ export default function ForYou() {
             if (!requestRes.ok && requestRes.status !== 409) {
                 throw new Error(requestData.error || "Failed to save movie to the vault.");
             }
-            const movieToSave = requestData.movie || movie;
+            const movieToSave = normalizeMovie(requestData.movie || movie);
             const getRes = await fetch(`http://localhost:8080/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
@@ -187,14 +160,7 @@ export default function ForYou() {
                                             <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
                                         </div>
 
-                                        <Card.Body className="p-2">
-                                            <Card.Title
-                                                className="mb-0"
-                                                style={{ fontSize: '0.8rem' }}
-                                            >
-                                                {movie.title}
-                                            </Card.Title>
-
+                                        <Card.Body className="p-2" style={{ textAlign: "left" }}>
                                             <Card.Subtitle
                                                 style={{
                                                     fontSize: '0.72rem',
