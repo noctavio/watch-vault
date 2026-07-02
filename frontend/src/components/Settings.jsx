@@ -36,15 +36,6 @@ export default function Settings(){
         );
     }
 
-    const logOut = () => {
-        if(confirm("Do you wish to Log Out?")){
-            localStorage.removeItem("token"); // add this
-            setUser(null);
-            alert("Successfully Logged Out!");
-            navigate("/");
-        }
-    };
-
     const deleteUser = async () => {
         if(confirm("Do you wish to Delete Account?")){
             try {
@@ -231,25 +222,20 @@ export default function Settings(){
                             </Card.Body>
                         </Card>
 
-                        <Card className="p-3" style={{ maxWidth: "500px" }}>
-                            <Card.Header><Card.Subtitle>Account Details</Card.Subtitle></Card.Header>
-                            <Card.Body>
-                                <p className="mb-1"><strong>Username:</strong> {user.username}</p>
-                                <p className="mb-1"><strong>Email:</strong> {user.email}</p>
-                            </Card.Body>
-                        </Card>
-
-                        <Card className="p-3" style={{ maxWidth: "500px", borderColor: "#A8293E" }}>
-                            <Card.Header style={{ borderColor: "#A8293E" }}><Card.Subtitle style={{ color: "#A8293E" }}>WARNING: Permanent Action</Card.Subtitle></Card.Header>
-                            <Card.Body>
-                                <Button variant="warning" onClick={deleteUser}>Delete Account</Button>
-                            </Card.Body>
-                        </Card>
-
-                        <Button variant="warning" style={{ maxWidth: "fit-content" }} onClick={logOut}>
-                            Log Out
-                        </Button>
-
+                        <div className="d-flex gap-3">
+                            <Card className="p-3"style={{ maxWidth: "218px", borderColor: "#A8293E" }}>
+                                <Card.Header style={{ borderColor: "#A8293E" }}>
+                                    <Card.Subtitle style={{ color: "#A8293E" }}>
+                                        WARNING: All data will be irrecoverable
+                                    </Card.Subtitle>
+                                </Card.Header>
+                                <Card.Body>
+                                    <Button variant="warning" onClick={deleteUser}>
+                                        Delete Account
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        </div>
                     </Card.Body>
                 </Card>
             </div>

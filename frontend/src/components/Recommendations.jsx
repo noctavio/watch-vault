@@ -56,12 +56,6 @@ export default function Recommendations(){
                                 </Card.Body>
                             </Card>
                             <Card className="p-3 w-100">
-                                <Card.Header><Card.Subtitle>Top Rated</Card.Subtitle></Card.Header>
-                                <Card.Body>
-                                    <TopRated/>
-                                </Card.Body>
-                            </Card>
-                            <Card className="p-3 w-100">
                                 <Card.Header><Card.Subtitle>Complete the Series</Card.Subtitle></Card.Header>
                                 <Card.Body>
                                     <CompletedSeries/>

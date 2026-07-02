@@ -58,6 +58,7 @@ router.get("/recommendations/fav_genre/movie/:id", async (req, res) => {
             `${BASE_URL}/discover/movie?api_key=${apiKey}&sort_by=popularity.desc&with_genres=${genres}&vote_count.gte=200&vote_average.gte=6&page=1`,
         ).then((r) => r.json());
 
+        movies.results = movies.results.slice(0, 8);
         movies.results = await attachDirectors(movies.results, apiKey);
 
         return res.status(200).send(movies);
@@ -124,8 +125,8 @@ router.get("/recommendations/movie/belongs_to_vault/:id", async (req, res) => {
             `${BASE_URL}/collection/${collectionId}?api_key=${apiKey}`,
         ).then((r) => r.json());
 
-        collection.parts = await attachDirectors(collection.parts ?? [], apiKey); // add this
-
+        collection.parts = (collection.parts ?? []).slice(0, 8);
+        collection.parts = await attachDirectors(collection.parts, apiKey);
         return res.status(200).send(collection);
     } catch (error) {
         console.error("Error fetching belongs_to_vault:", error);
@@ -147,6 +148,7 @@ router.get("/recommendations/movie/:id", async (req, res) => {
         ).then((r) => r.json());
 
         movies.results = await attachDirectors(movies.results, apiKey);
+        movies.results = movies.results.slice(0, 8);
 
         return res.status(200).send(movies);
     } catch (error) {

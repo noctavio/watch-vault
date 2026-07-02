@@ -50,6 +50,17 @@ export default function ForYou() {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || "Failed to fetch recommendations.");
                 const normalized = (data.results || []).map(normalizeMovie);
+
+                await Promise.all(
+                    normalized.map((movie) =>
+                        fetch(`http://localhost:8080/api/movies/request`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ id: movie.id }),
+                        }).catch(() => {}) // ignore movies alread in localdb
+                    )
+                );
+
                 setMovies(normalized);
             } catch (err) {
                 setError(err.message);
