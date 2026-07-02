@@ -1,9 +1,4 @@
 # AL_10
-
-## Submission Requirement
-
-Before submitting, update this README with:
-
 - `Alex Erickson` - aerick22@iastate.edu
 - `Octavio Munoz` - munozo@iastate.edu
 
