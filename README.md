@@ -4,7 +4,7 @@
 
 Before submitting, update this README with:
 
-- `Alex Erickson` - email@iastate.edu
+- `Alex Erickson` - aerick22@iastate.edu
 - `Octavio Munoz` - munozo@iastate.edu
 
 # Brief project description
