@@ -24,44 +24,6 @@ const chunkArray = (arr, size) => {
     return chunks;
 };
 
-function MovieCard({ movie, onAdd }) {
-    return (
-        <Card style={{ width: "200px", flexShrink: 0 }}>
-            <div className="poster-wrap" style={{ position: "relative" }}>
-                <Card.Img
-                    variant="top"
-                    src={movie.poster || "https://placehold.co/200x300?text=No+Image"}
-                    alt={movie.title}
-                    className="movie-poster"
-                    style={{ height: "280px", objectFit: "cover" }}
-                />
-                {movie.genres?.[0] && (
-                    <span className="genre-overlay">{movie.genres[0]}</span>
-                )}
-                <span className="rating-badge">★ {movie.rating?.toFixed(1)}</span>
-            </div>
-            <Card.Body className="p-2">
-                <Card.Title className="mb-0" style={{ fontSize: "0.8rem" }}>
-                    {movie.title}
-                </Card.Title>
-                <Card.Subtitle style={{ fontSize: "0.72rem", marginTop: "2px" }}>
-                    {movie.director ? `${movie.director} · ` : ""}{movie.releaseYear}
-                </Card.Subtitle>
-            </Card.Body>
-            <div className="p-2">
-                <Button
-                    size="sm"
-                    variant="primary"
-                    className="w-100"
-                    onClick={() => onAdd(movie)}
-                >
-                    + Watchlist
-                </Button>
-            </div>
-        </Card>
-    );
-}
-
 export default function Home() {
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
@@ -71,6 +33,24 @@ export default function Home() {
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [alert, setAlertMessage] = useState(null);
     const [loadingMovies, setLoadingMovies] = useState(true);
+
+    const [watchlistIds, setWatchlistIds] = useState(new Set());
+
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            if (!user?.watchlistId) return;
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const ids = new Set((data.items ?? []).map(item => item.id));
+                setWatchlistIds(ids);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchWatchlist();
+    }, [user]);
 
     useEffect(() => {
         const fetchRandomMovies = async () => {
@@ -122,6 +102,29 @@ export default function Home() {
                 body: JSON.stringify({ items: [...currentItems, movieToSave] }),
             });
             if (!putRes.ok) throw new Error("Failed to update watchlist.");
+            setWatchlistIds(prev => new Set([...prev, movie.id]))
+        } catch (err) {
+            setAlertMessage({ type: "danger", message: err.message });
+        }
+    };
+
+    const removeFromWatchlist = async (movie) => {
+        try {
+            const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+            if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
+            const data = await getRes.json();
+            const updatedItems = (data.items ?? []).filter(item => item.id !== movie.id);
+            const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items: updatedItems }),
+            });
+            if (!putRes.ok) throw new Error("Failed to update watchlist.");
+            setWatchlistIds(prev => {
+                const updated = new Set(prev);
+                updated.delete(movie.id);
+                return updated;
+            });
         } catch (err) {
             setAlertMessage({ type: "danger", message: err.message });
         }
@@ -240,9 +243,10 @@ export default function Home() {
 
                                                     <Button
                                                         className="mt-2 w-100"
-                                                        onClick={() => addToWatchlist(movie)}
+                                                        style={watchlistIds.has(movie.id) ? { backgroundColor: '#C9A84C', borderColor: '#C9A84C' } : {}}
+                                                        onClick={() => watchlistIds.has(movie.id) ? removeFromWatchlist(movie) : addToWatchlist(movie)}
                                                     >
-                                                        Add to Watchlist
+                                                        {watchlistIds.has(movie.id) ? "Remove from Watchlist" : "Add to Watchlist"}
                                                     </Button>
                                                 </Card.Body>
                                             </Card>

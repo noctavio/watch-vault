@@ -155,7 +155,7 @@ export default function Settings() {
                                         {errors.username && <p className="text-danger small mt-1">{errors.username.message}</p>}
                                     </Form.Group>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Change Email address</Form.Label>
+                                        <Form.Label>Change Email Address</Form.Label>
                                         <Form.Control
                                             {...register("email", {
                                                 pattern: { value: /^\S+@\S+$/i, message: "A valid email is required" }
