@@ -82,7 +82,6 @@ export default function ApiKeys() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Value</th>
                             <th>Updated At</th>
                         </tr>
                     </thead>
