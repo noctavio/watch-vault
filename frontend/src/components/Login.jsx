@@ -10,26 +10,26 @@ export default function Login(){
     const { user, setUser } = useContext(UserContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
+    const [loginStatus, setLoginStatus] = useState(null);
 
     const onSubmit = async (data) => {
         const url = `${import.meta.env.VITE_API_URL}/api/auth/login`;
-        try{
+        try {
             const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-            if(!response.ok){
-                alert("Invalid Username or Password");
+            if (!response.ok) {
+                setLoginStatus({ message: "Invalid Username or Password", type: "danger" });
             } else {
                 const json = await response.json();
-                localStorage.setItem("token", json.token); 
+                localStorage.setItem("token", json.token);
                 setUser(json);
-                alert("Login Successful");
                 navigate("/");
             }
-        }catch(error){
-            alert("Something went wrong. Please try again.");
+        } catch (error) {
+            setLoginStatus({ message: "Something went wrong. Please try again.", type: "danger" });
         }
     };
 
@@ -62,6 +62,12 @@ export default function Login(){
                                     />
                                     {errors.password && <p className="text-danger small mt-1">Password is required</p>}
                                 </Form.Group>
+
+                                {loginStatus && (
+                                    <Form.Label className={`text-${loginStatus.type} w-100 text-center mb-2`}>
+                                        {loginStatus.message}
+                                    </Form.Label>
+                                )}
                                 <Button variant="primary" type="submit" className="w-100 mb-3">
                                     Login
                                 </Button>
