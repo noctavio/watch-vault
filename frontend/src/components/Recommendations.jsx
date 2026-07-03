@@ -4,7 +4,6 @@ import React, { useContext } from 'react';
 import { UserContext } from './User';
 import { useNavigate } from 'react-router-dom';
 import ForYou from './recomendations_components/ForYou.jsx';
-import TopRated from './recomendations_components/TopRated.jsx';
 import MoreLike from './recomendations_components/MoreLike.jsx';
 import CompletedSeries from './recomendations_components/CompletedSeries.jsx';
 import { PersonCircle } from 'react-bootstrap-icons';
