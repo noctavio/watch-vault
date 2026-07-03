@@ -76,9 +76,15 @@ router.post("/auth/register", async (req, res) => {
         const usersCollection = db.collection("Users");
         const watchlistsCollection = db.collection("Watchlists");
 
-        const existingUser = await usersCollection.findOne({ email });
-        if (existingUser) {
-            return res.status(409).send({ error: 'Conflict: A user with this email already exists' });
+        // Check both separately for specific errors
+        const existingEmail = await usersCollection.findOne({ email });
+        if (existingEmail) {
+            return res.status(409).send({ error: 'email' });
+        }
+
+        const existingUsername = await usersCollection.findOne({ username });
+        if (existingUsername) {
+            return res.status(409).send({ error: 'username' });
         }
 
         const lastUser = await usersCollection.findOne({}, { sort: { userId: -1 } });
@@ -107,7 +113,22 @@ router.post("/auth/register", async (req, res) => {
             role: "user"
         });
 
-        res.status(201).send({ message: 'User created successfully', userId, watchlistId });
+        // Sign token and return user data for auto-login
+        const token = jwt.sign(
+            { userId, role: "user", username },
+            SECRET,
+            { expiresIn: "7d" }
+        );
+
+        res.status(201).send({
+            token,
+            userId,
+            username,
+            email,
+            watchlistId,
+            favGeneres: [],
+            role: "user"
+        });
     } catch (error) {
         console.error("An error occurred:", error);
         res.status(500).send({ error: 'An internal server error occurred' });
