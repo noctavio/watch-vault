@@ -50,9 +50,6 @@ export default function Search() {
                 const data = await getRes.json();
 
                 const currentItems = data.items ?? [];
-                if (currentItems.some((item) => item.id === movie.id)) {
-                    return alert(`"${movie.title}" is already in your watchlist.`);
-                }
 
                 const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                     method: "PUT",
@@ -60,7 +57,6 @@ export default function Search() {
                     body: JSON.stringify({ items: [...currentItems, movie] }),
                 });
                 if (!putRes.ok) throw new Error("Failed to update watchlist.");
-                alert(`"${movie.title}" added to your watchlist!`);
             } catch (err) {
                 alert(err.message);
             }
