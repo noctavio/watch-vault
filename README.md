@@ -3,7 +3,7 @@
 - `Octavio Munoz` - munozo@iastate.edu
 
 # Brief project description
-Watchvault is an app where users can view trending films, save their favorite movies, and create and view reviews by other users. Any user can create their own set of watched movies where they must set the individual status to watched to create a review. Admins can manually delete reviews they deem inappropriate and delete any film in the local database as well as request one through TMDB’s api. Every film on the app has its own individual review page which compiles and filters reviews through multiple pages; it incorporates a social feature through a like and dislike system.
+Watchvault is an app where users can view trending films, save their favorite movies, and create and view reviews by other users. Any user can create their own set of watched movies where they must set the individual status to watched to create a review. Admins can manually delete reviews they deem inappropriate and delete any film in the database as well as request one through TMDB’s api. Every film on the app has its own individual review page which compiles and filters reviews through multiple pages; it incorporates a social feature through a like and dislike system.
 
 ## Setup instructions (if any)
 Open two terminals: first terminal run following commands
