@@ -17,6 +17,8 @@ export default function Search() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [watchlistIds, setWatchlistIds] = useState(new Set());
+
     useEffect(() => {
         const fetchMovies = async () => {
             setLoading(true);
@@ -42,24 +44,74 @@ export default function Search() {
         fetchMovies();
     }, [query, page]);
 
-    const addToWatchlist = async (movie) => {
-        if (!user) return alert("You need to be logged in to add to your watchlist.");
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            if (!user?.watchlistId) return;
             try {
-                const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
-                if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
-                const data = await getRes.json();
-
-                const currentItems = data.items ?? [];
-
-                const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ items: [...currentItems, movie] }),
-                });
-                if (!putRes.ok) throw new Error("Failed to update watchlist.");
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const ids = new Set((data.items ?? []).map(item => item.id));
+                setWatchlistIds(ids);
             } catch (err) {
-                alert(err.message);
+                console.error(err);
             }
+        };
+        fetchWatchlist();
+    }, [user]);
+
+    const addToWatchlist = async (movie) => {
+        if (!user) {
+            setAlertMessage({ type: "danger", message: "You need to be logged in to add to your watchlist." });
+            return;
+        }
+        try {
+            const requestRes = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: movie.id }),
+            });
+            const requestData = await requestRes.json();
+            if (!requestRes.ok && requestRes.status !== 409) {
+                throw new Error(requestData.error || "Failed to save movie to the vault.");
+            }
+            const movieToSave = requestData.movie || movie;
+            const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+            if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
+            const data = await getRes.json();
+            const currentItems = data.items ?? [];
+            const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items: [...currentItems, movieToSave] }),
+            });
+            if (!putRes.ok) throw new Error("Failed to update watchlist.");
+            setWatchlistIds(prev => new Set([...prev, movie.id]))
+        } catch (err) {
+            setAlertMessage({ type: "danger", message: err.message });
+        }
+    };
+
+    const removeFromWatchlist = async (movie) => {
+        try {
+            const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+            if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
+            const data = await getRes.json();
+            const updatedItems = (data.items ?? []).filter(item => item.id !== movie.id);
+            const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items: updatedItems }),
+            });
+            if (!putRes.ok) throw new Error("Failed to update watchlist.");
+            setWatchlistIds(prev => {
+                const updated = new Set(prev);
+                updated.delete(movie.id);
+                return updated;
+            });
+        } catch (err) {
+            setAlertMessage({ type: "danger", message: err.message });
+        }
     };
 
     const goToPage = (newPage) => {
@@ -172,12 +224,13 @@ export default function Search() {
                                     <Card.Subtitle style={{ fontSize: '0.72rem', marginTop: '2px' }}>
                                         {movie.director} · {movie.releaseYear}
                                     </Card.Subtitle>
-                                    <Button
-                                        className="mt-2 w-100"
-                                        onClick={() => addToWatchlist(movie)}
-                                    >
-                                        Add to Watchlist
-                                    </Button>
+                                        <Button
+                                            className="mt-2 w-100"
+                                            style={watchlistIds.has(movie.id) ? { backgroundColor: '#C9A84C', borderColor: '#C9A84C' } : {}}
+                                            onClick={() => watchlistIds.has(movie.id) ? removeFromWatchlist(movie) : addToWatchlist(movie)}
+                                        >
+                                            {watchlistIds.has(movie.id) ? "Remove from Watchlist" : "Add to Watchlist"}
+                                        </Button>
                                 </Card.Body>
                             </Card>
                         ))}

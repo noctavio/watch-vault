@@ -23,8 +23,8 @@ export default function Layout({ children }) {
         }
     };
     return (
-        <>
-            <header>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <header>
                 <Navbar expand="lg" data-bs-theme="dark">
                     <Container fluid>
                         <Navbar.Brand as={NavLink} to="/">WatchVault</Navbar.Brand>
@@ -52,7 +52,9 @@ export default function Layout({ children }) {
                     </Container>
                 </Navbar>
             </header>
-            <main>{children}</main>
+            <main style={{ flex: 1 }}>
+                {children}
+            </main>
             <footer>
                 <Container>
                     <Row>
@@ -67,6 +69,6 @@ export default function Layout({ children }) {
                     </Row>
                 </Container>
             </footer>
-        </>
+    </div>
     );
 };

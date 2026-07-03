@@ -39,6 +39,8 @@ export default function CompletedSeries() {
     const [movies, setMovies] = useState([]);
     const navigate = useNavigate();
 
+    const [watchlistIds, setWatchlistIds] = useState(new Set());
+
     useEffect(() => {
         const fetchMovies = async () => {
             setLoading(true);
@@ -93,6 +95,22 @@ export default function CompletedSeries() {
         if (user?.watchlistId) fetchMovies();
     }, [user]);
 
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            if (!user?.watchlistId) return;
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const ids = new Set((data.items ?? []).map(item => item.id));
+                setWatchlistIds(ids);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchWatchlist();
+    }, [user]);
+
     const addToWatchlist = async (movie) => {
         if (!user) {
             setAlertMessage({ type: "danger", message: "You need to be logged in to add to your watchlist." });
@@ -113,13 +131,35 @@ export default function CompletedSeries() {
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
             const currentItems = data.items ?? [];
-
             const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items: [...currentItems, movieToSave] }),
             });
             if (!putRes.ok) throw new Error("Failed to update watchlist.");
+            setWatchlistIds(prev => new Set([...prev, movie.id]))
+        } catch (err) {
+            setAlertMessage({ type: "danger", message: err.message });
+        }
+    };
+
+    const removeFromWatchlist = async (movie) => {
+        try {
+            const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+            if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
+            const data = await getRes.json();
+            const updatedItems = (data.items ?? []).filter(item => item.id !== movie.id);
+            const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items: updatedItems }),
+            });
+            if (!putRes.ok) throw new Error("Failed to update watchlist.");
+            setWatchlistIds(prev => {
+                const updated = new Set(prev);
+                updated.delete(movie.id);
+                return updated;
+            });
         } catch (err) {
             setAlertMessage({ type: "danger", message: err.message });
         }
@@ -189,9 +229,10 @@ export default function CompletedSeries() {
 
                                             <Button
                                                 className="mt-2 w-100"
-                                                onClick={() => addToWatchlist(movie)}
+                                                style={watchlistIds.has(movie.id) ? { backgroundColor: '#C9A84C', borderColor: '#C9A84C' } : {}}
+                                                onClick={() => watchlistIds.has(movie.id) ? removeFromWatchlist(movie) : addToWatchlist(movie)}
                                             >
-                                                Add to Watchlist
+                                                {watchlistIds.has(movie.id) ? "Remove from Watchlist" : "Add to Watchlist"}
                                             </Button>
                                         </Card.Body>
                                     </Card>
