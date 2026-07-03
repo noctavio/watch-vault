@@ -138,7 +138,7 @@ export default function Settings(){
                             <Card.Body>
                                 <Form onSubmit={handleSubmit(changeAccountInfo)}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Username</Form.Label>
+                                        <Form.Label>Change Username</Form.Label>
                                         <Form.Control
                                             {...register("username", { minLength: 3 })}
                                             type="text"
@@ -149,7 +149,7 @@ export default function Settings(){
                                         )}
                                     </Form.Group>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Email address</Form.Label>
+                                        <Form.Label>Change Email address</Form.Label>
                                         <Form.Control
                                             {...register("email", { pattern: /^\S+@\S+$/i })}
                                             type="email"
@@ -171,24 +171,23 @@ export default function Settings(){
                             <Card.Body>
                                 <Form onSubmit={handleSubmitPw(changePassword)}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Password*</Form.Label>
+                                        <Form.Label>Enter New Password</Form.Label>
                                         <Form.Control
                                             {...registerPw("password", { required: true, minLength: 8 })}
                                             type="password"
-                                            placeholder="Password"
+                                            placeholder="New Password"
                                         />
                                         {pwErrors.password?.type === 'required' && <p className="text-danger small mt-1">Password is required</p>}
                                         {pwErrors.password?.type === 'minLength' && <p className="text-danger small mt-1">Password must be at least 8 characters</p>}
                                     </Form.Group>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Confirm Password*</Form.Label>
                                         <Form.Control
                                             {...registerPw("confirmPassword", {
                                                 required: true,
                                                 validate: val => val === watch("password") || "Passwords do not match"
                                             })}
                                             type="password"
-                                            placeholder="Confirm Password"
+                                            placeholder="Confirm New Password"
                                         />
                                         {pwErrors.confirmPassword?.type === 'required' && <p className="text-danger small mt-1">Confirm password is required</p>}
                                         {pwErrors.confirmPassword && <p className="text-danger small mt-1">{pwErrors.confirmPassword.message}</p>}
