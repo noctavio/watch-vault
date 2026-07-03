@@ -20,7 +20,6 @@ export default function App(){
             <Route path='/watchlist' element={<Watchlist/>} />
             <Route path='/adminpage' element={<Admin />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/adminlogin" element={<ByPassLogin />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home />} />

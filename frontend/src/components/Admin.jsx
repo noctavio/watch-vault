@@ -4,9 +4,7 @@ import React, { useContext } from 'react';
 import { UserContext } from './User';
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
-import UserPermissions from './admin_components/UserPermissions.jsx';
 import ApiKeys from './admin_components/ApiKeys.jsx';
-import UpdateMovies from './admin_components/UpdateMovies.jsx';
 
 const isLogin = (aUser) => !aUser || Object.keys(aUser).length === 0;
 const isAdmin = (aUser) => aUser?.role === "admin";
@@ -41,9 +39,7 @@ export default function Admin() {
                         <Card.Title className="mt-2">Admin Panel</Card.Title>
                     </Card.Header>
                     <Card.Body className="d-flex flex-column gap-3">
-                        <UserPermissions user={user} />
                         <ApiKeys />
-                        <UpdateMovies />
                     </Card.Body>
                 </Card>
             </div>
