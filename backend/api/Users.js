@@ -14,14 +14,14 @@ router.post("/auth/login", async (req, res) => {
         return res.status(400).send({ error: 'Bad request: No data provided' });
     }
     try {
-        const user = await db.collection("Users").findOne({ email: req.body.email });
+        const user = await db.collection("Users").findOne({ username: req.body.username });
         const isMatch = user && await bcrypt.compare(req.body.password, user.password);
         if (!isMatch) {
             return res.status(401).send({ error: 'Invalid credentials' });
         }
 
         const token = jwt.sign(
-            { userId: user.userId, role: user.role, email: user.email },
+            { userId: user.userId, role: user.role, username: user.username },
             SECRET,
             { expiresIn: "7d" }
         );

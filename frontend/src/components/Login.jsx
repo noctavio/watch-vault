@@ -20,7 +20,7 @@ export default function Login(){
                 body: JSON.stringify(data),
             });
             if(!response.ok){
-                alert("Invalid Email or Password");
+                alert("Invalid Username or Password");
             } else {
                 const json = await response.json();
                 localStorage.setItem("token", json.token); 
@@ -44,14 +44,14 @@ export default function Login(){
                         </Card.Header>
                         <Card.Body>
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                                <Form.Group className="mb-3" controlId="formEmail">
-                                    <Form.Label>Email address</Form.Label>
+                                <Form.Group className="mb-3" controlId="formUsername">
+                                    <Form.Label>Username</Form.Label>
                                     <Form.Control
-                                    {...register("email", { required: true })}
-                                    type="email"
-                                    placeholder="Enter Email"
+                                        {...register("username", { required: true })}
+                                        type="text"
+                                        placeholder="Enter Username"
                                     />
-                                    {errors.email && <p className="text-danger small mt-1">Email is required</p>}
+                                    {errors.username && <p className="text-danger small mt-1">Username is required</p>}
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formPassword">
                                     <Form.Label>Password</Form.Label>
