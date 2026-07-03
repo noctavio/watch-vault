@@ -15,7 +15,10 @@ export default function Watchlist() {
     const [itemsChecked, setItemsChecked] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [search, setSearch] = useState('');
+    const [page, setPage] = useState(1); 
     const navigate = useNavigate();
+    const PAGE_SIZE = 12;
 
     useEffect(() => {
         if (!user) return;
@@ -87,43 +90,56 @@ export default function Watchlist() {
         );
     }
 
+    const filtered = watchlist.filter(movie =>
+        movie.title?.toLowerCase().includes(search.toLowerCase()) ||
+        movie.director?.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+    const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+    useEffect(() => {
+        setPage(1);
+    }, [search]);
+
     return (
-        <Layout>
-            <div className="container py-4">
-                <h5 className="mb-3">Your Watchlist</h5>
+    <Layout>
+        <div className="container py-4">
+            <h5 className="mb-3">Your Watchlist ({watchlist.length} Films)</h5>
+            <div className="d-flex justify-content-center mb-4">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search watchlist..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{ maxWidth: '400px' }}
+                />
+            </div>
 
-                {loading && (
-                    <div className="text-center">
-                        <Spinner animation="border" />
-                    </div>
-                )}
+            {loading && <div className="text-center"><Spinner animation="border" /></div>}
+            {error && <p className="text-danger text-center">{error}</p>}
 
-                {error && (
-                    <p className="text-danger text-center">{error}</p>
-                )}
+            {!loading && !error && watchlist.length === 0 && (
+                <p className="text-center" style={{ color: '#DC3545' }}>Empty...</p>
+            )}
 
-                {!loading && !error && watchlist.length === 0 && (
-                    <p className="text-center" style={{ color: '#DC3545' }}>Empty...</p>
-                )}
+            {/* No search results */}
+            {!loading && !error && watchlist.length > 0 && filtered.length === 0 && (
+                <p className="text-center" style={{ color: '#DC3545' }}>
+                    No movies found for "{search}" in your watchlist.
+                </p>
+            )}
 
-                {!loading && !error && watchlist.length > 0 && (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "1rem",
-                        }}
-                    >
-                        {watchlist.map((movie) => {
+            {!loading && !error && paginated.length > 0 && (
+                <>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+                        {paginated.map((movie) => {
                             const watched = itemsChecked.includes(movie.id);
                             return (
                                 <Card
                                     key={movie.id}
-                                    style={{
-                                        width: "200px",
-                                        opacity: watched ? 0.6 : 1,
-                                        flexShrink: 0,
-                                    }}
+                                    style={{ width: "200px", opacity: watched ? 0.6 : 1, flexShrink: 0 }}
                                 >
                                     <div
                                         className="poster-wrap"
@@ -168,8 +184,34 @@ export default function Watchlist() {
                             );
                         })}
                     </div>
-                )}
-            </div>
-        </Layout>
-    );
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                        <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+                            <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => setPage(p => p - 1)}
+                                disabled={page <= 1}
+                            >
+                                &lt;
+                            </Button>
+                            <span style={{ color: '#C9A84C' }}>
+                                Page {page} of {totalPages}
+                            </span>
+                            <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => setPage(p => p + 1)}
+                                disabled={page >= totalPages}
+                            >
+                                &gt;
+                            </Button>
+                        </div>
+                    )}
+                </>
+            )}
+        </div>
+    </Layout>
+);
 }

@@ -1,10 +1,11 @@
 import { Container, Navbar, Nav, Row, Col } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { UserContext } from './User';
 
 export default function Layout({ children }) {
     const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
     const isLoggedIn = (aUser) => {
         return (
             aUser !== null &&
@@ -33,7 +34,6 @@ export default function Layout({ children }) {
                             <Nav className="ms-auto">
                                 <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
                                 <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Recommendations</Nav.Link>
-                                <Nav.Link as={NavLink} to="/create_review" className={navLinkClass}>Write a Review</Nav.Link>
                                 {!isLoggedIn(user) ? (
                                     <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
                                 ) : (
