@@ -19,7 +19,6 @@ export default function Layout({ children }) {
         if (window.confirm("Do you wish to Log Out?")) {
             localStorage.removeItem("token");
             setUser(null);
-            alert("Successfully Logged Out!");
             navigate("/");
         }
     };

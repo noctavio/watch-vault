@@ -114,17 +114,14 @@ export default function MoreLike() {
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
             const currentItems = data.items ?? [];
-            if (currentItems.some((item) => item.id === movieToSave.id)) {
-                setAlert({ type: "warning", message: `"${movieToSave.title}" is already in your watchlist.` });
-                return;
-            }
+
             const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items: [...currentItems, movieToSave] }),
             });
             if (!putRes.ok) throw new Error("Failed to update watchlist.");
-            setAlert({ type: "success", message: `"${movieToSave.title}" added to your watchlist!` });
+
         } catch (err) {
             setAlert({ type: "danger", message: err.message });
         }

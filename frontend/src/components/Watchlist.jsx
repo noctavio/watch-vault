@@ -103,7 +103,7 @@ export default function Watchlist() {
                 )}
 
                 {!loading && !error && watchlist.length === 0 && (
-                    <p className="text-center" style={{ color: '#DC3545' }}>NO RESULTS...</p>
+                    <p className="text-center" style={{ color: '#DC3545' }}>Empty...</p>
                 )}
 
                 {!loading && !error && watchlist.length > 0 && (
