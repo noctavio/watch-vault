@@ -33,7 +33,7 @@ export default function Reviews() {
 
     const fetchMovie = async () => {
         try {
-            const res = await fetch(`/api/search/${movieId}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/search/${movieId}`);
             if (!res.ok) throw new Error("Movie not found");
             const data = await res.json();
             setMovie(data);
@@ -45,7 +45,7 @@ export default function Reviews() {
     const fetchReviews = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`/api/reviews/${movieId}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${movieId}`);
             if (!res.ok) throw new Error("Failed to fetch reviews");
             const data = await res.json();
             setReviews(data);
@@ -59,7 +59,7 @@ export default function Reviews() {
     const handleVote = async (reviewId, vote) => {
         if (!user) return alert("You must be logged in to vote.");
         try {
-            const res = await fetch(`/api/reviews/${reviewId}/vote`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${reviewId}/vote`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: user._id, vote }),
@@ -75,7 +75,7 @@ export default function Reviews() {
     const handleDelete = async (reviewId) => {
         if (!window.confirm("Delete this review?")) return;
         try {
-            const res = await fetch(`/api/reviews/${reviewId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${reviewId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: user._id, role: user.role }),
@@ -98,7 +98,7 @@ export default function Reviews() {
     const handleEdit = async (reviewId) => {
         setEditLoading(true);
         try {
-            const res = await fetch(`/api/reviews/${reviewId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${reviewId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

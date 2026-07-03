@@ -22,7 +22,7 @@ export default function Search() {
             setLoading(true);
             setError(null);
             try {
-                const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&page=${page}`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/search?q=${encodeURIComponent(query)}&page=${page}`);
                 const text = await res.text(); // debug string
                 try {
                     const data = JSON.parse(text);
@@ -45,7 +45,7 @@ export default function Search() {
     const addToWatchlist = async (movie) => {
         if (!user) return alert("You need to be logged in to add to your watchlist.");
             try {
-                const getRes = await fetch(`/api/watchlist/${user.watchlistId}`);
+                const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
                 if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
                 const data = await getRes.json();
 
@@ -54,7 +54,7 @@ export default function Search() {
                     return alert(`"${movie.title}" is already in your watchlist.`);
                 }
 
-                const putRes = await fetch(`/api/watchlist/${user.watchlistId}`, {
+                const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ items: [...currentItems, movie] }),
@@ -75,7 +75,7 @@ export default function Search() {
         e.stopPropagation();
         if (!window.confirm(`Remove "${movie.title}" from the vault?`)) return;
         try {
-            const res = await fetch('/api/movies/remove', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/remove`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: movie.id }),

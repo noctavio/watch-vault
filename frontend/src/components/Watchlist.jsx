@@ -26,7 +26,7 @@ export default function Watchlist() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`/api/watchlist/${user.watchlistId}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!res.ok) throw new Error("Failed to fetch watchlist.");
             const data = await res.json();
             setWatchlist(data.items ?? []);
@@ -41,7 +41,7 @@ export default function Watchlist() {
     const removeFromWatchlist = async (movie) => {
         try {
             const updatedItems = watchlist.filter((item) => item.id !== movie.id);
-            const res = await fetch(`/api/watchlist/${user.watchlistId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items: updatedItems }),
@@ -55,7 +55,7 @@ export default function Watchlist() {
 
     const toggleWatched = async (movie) => {
         try {
-            const res = await fetch(`/api/watchlist/watched/${user.watchlistId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/watched/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: movie.id }),

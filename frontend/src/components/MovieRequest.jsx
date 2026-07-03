@@ -30,7 +30,7 @@ export default function MovieRequest() {
         lastSearch.current = now;
 
         try {
-            const res = await fetch(`/api/movies/tmdb-search?q=${encodeURIComponent(query.trim())}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/tmdb-search?q=${encodeURIComponent(query.trim())}`);
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Search failed');
             if (data.length === 0) setError('No results found. Try a different title.');
@@ -47,7 +47,7 @@ export default function MovieRequest() {
         setMessage(null);
         setError(null);
         try {
-            const res = await fetch('/api/movies/request', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: movie.id }),

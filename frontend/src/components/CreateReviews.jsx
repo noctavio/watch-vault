@@ -29,7 +29,7 @@ export default function CreateReviews() {
     setLoading(true);
     setError(null);
     try {
-        const res = await fetch(`/api/watchlist/${user.watchlistId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
         if (!res.ok) throw new Error("Failed to fetch watchlist.");
         const data = await res.json();
         setWatchlist(data.items ?? []);
@@ -86,7 +86,7 @@ export default function CreateReviews() {
         setSuccess(null);
 
         try {
-            const res = await fetch('/api/reviews', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
