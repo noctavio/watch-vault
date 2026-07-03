@@ -15,23 +15,6 @@ export default function Admin() {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
 
-    if (isLogin(user)) {
-        return (
-            <Layout>
-                <div className="d-flex justify-content-center align-items-center min-vh-100">
-                    <Card className="p-4 text-center" style={{ maxWidth: "400px", width: "100%" }}>
-                        <Card.Body>
-                            <PersonCircle size={64} color="#C9A84C" className="mb-3" />
-                            <Card.Title>Not Logged In</Card.Title>
-                            <p className="card-text mb-4">You need to be logged in to view your Admin Page.</p>
-                            <Button className="w-100" onClick={() => navigate("/login")}>Go to Login</Button>
-                        </Card.Body>
-                    </Card>
-                </div>
-            </Layout>
-        );
-    }
-
     if (!isAdmin(user)) {
         return (
             <Layout>
