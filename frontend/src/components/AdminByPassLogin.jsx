@@ -12,7 +12,7 @@ export default function ByPassLogin(){
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const url = "http://localhost:8080/api/auth/admin/bypass/login";
+        const url = `${import.meta.env.VITE_API_URL}/api/auth/admin/bypass/login`;
         try{
             const response = await fetch(url, {
                 method: "POST",

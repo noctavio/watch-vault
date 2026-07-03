@@ -45,7 +45,7 @@ export default function MoreLike() {
             setError(null);
             try {
                 const watchlistRes = await fetch(
-                    `http://localhost:8080/api/watchlist/${user.watchlistId}`
+                    `${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`
                 );
                 const watchlistData = await watchlistRes.json();
                 if (!watchlistRes.ok)
@@ -60,7 +60,7 @@ export default function MoreLike() {
                 const shuffledItems = [...items].sort(() => Math.random() - 0.5);
                 for (const movie of shuffledItems) {
                     const res = await fetch(
-                        `http://localhost:8080/api/recommendations/movie/${movie.id}`
+                        `${import.meta.env.VITE_API_URL}/api/recommendations/movie/${movie.id}`
                     );
                     const data = await res.json();
                     if (res.ok && data.results?.length > 0) {
@@ -76,7 +76,7 @@ export default function MoreLike() {
 
                 // Fallback to random movies
                 const fallbackRes = await fetch(
-                    "http://localhost:8080/api/recommendations/random/movie"
+                    `${import.meta.env.VITE_API_URL}/api/recommendations/random/movie`
                 );
                 const fallbackData = await fallbackRes.json();
                 if (!fallbackRes.ok)
@@ -100,7 +100,7 @@ export default function MoreLike() {
             return;
         }
         try {
-            const requestRes = await fetch(`http://localhost:8080/api/movies/request`, {
+            const requestRes = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: movie.id }),
@@ -110,7 +110,7 @@ export default function MoreLike() {
                 throw new Error(requestData.error || "Failed to save movie to the vault.");
             }
             const movieToSave = requestData.movie || movie;
-            const getRes = await fetch(`http://localhost:8080/api/watchlist/${user.watchlistId}`);
+            const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
             const currentItems = data.items ?? [];
@@ -118,7 +118,7 @@ export default function MoreLike() {
                 setAlert({ type: "warning", message: `"${movieToSave.title}" is already in your watchlist.` });
                 return;
             }
-            const putRes = await fetch(`http://localhost:8080/api/watchlist/${user.watchlistId}`, {
+            const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items: [...currentItems, movieToSave] }),

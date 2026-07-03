@@ -39,7 +39,7 @@ export default function Settings(){
     const deleteUser = async () => {
         if(confirm("Do you wish to Delete Account?")){
             try {
-                const response = await fetch(`http://localhost:8080/api/auth/user/${user.userId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/${user.userId}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -66,7 +66,7 @@ export default function Settings(){
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/auth/user/${user.userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/${user.userId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
@@ -84,7 +84,7 @@ export default function Settings(){
 
     const changePassword = async (data) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/auth/user/${user.userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/${user.userId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ password: data.password }),
@@ -108,7 +108,7 @@ export default function Settings(){
 
     const updatePreferences = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/auth/user/${user.userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/${user.userId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ favGeneres: selectedGenres }),

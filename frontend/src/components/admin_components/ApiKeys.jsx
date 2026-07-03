@@ -8,7 +8,7 @@ export default function ApiKeys() {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     const fetchKeys = async () => {
-        const res = await fetch("http://localhost:8080/api/auth/admin/keys");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/admin/keys`);
         const data = await res.json();
         setKeys(data);
     };
@@ -23,7 +23,7 @@ export default function ApiKeys() {
         );
         let res;
         if (existingKey) {
-            res = await fetch(`http://localhost:8080/api/auth/admin/keys/${data.name}`, {
+            res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/admin/keys/${data.name}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -33,7 +33,7 @@ export default function ApiKeys() {
                 })
             });
         } else {
-            res = await fetch("http://localhost:8080/api/auth/admin/keys", {
+            res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/admin/keys`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
