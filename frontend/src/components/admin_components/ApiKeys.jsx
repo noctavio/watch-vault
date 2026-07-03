@@ -89,7 +89,6 @@ export default function ApiKeys() {
                         {keys.map((key) => (
                             <tr key={key._id}>
                                 <td>{key.name}</td>
-                                <td>{key.value}</td>
                                 <td>{new Date(key.updatedAt).toLocaleString()}</td>
                             </tr>
                         ))}
