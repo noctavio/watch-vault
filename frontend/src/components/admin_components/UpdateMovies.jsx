@@ -7,7 +7,7 @@ export default function UpdateMovies() {
     const syncMovies = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/api/movies/update`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/update`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({}),

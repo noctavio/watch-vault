@@ -15,7 +15,7 @@ export default function UserPermissions({ user }) {
     const deleteUser = async (aUser) => {
         if (!confirm("Do you wish to Delete Account?")) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/auth/user/${aUser.userId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/${aUser.userId}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
             });
@@ -30,7 +30,7 @@ export default function UserPermissions({ user }) {
     const updateRole = async (userId, role) => {
         if (!confirm(`Make this user ${role === "admin" ? "Admin" : "User"}?`)) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/auth/admin/users/${userId}/role`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/admin/users/${userId}/role`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ role }),
@@ -44,7 +44,7 @@ export default function UserPermissions({ user }) {
     };
 
     const fetchUsers = async () => {
-        const res = await fetch("http://localhost:8080/api/auth/admin/users", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/admin/users`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });

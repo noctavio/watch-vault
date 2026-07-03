@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 var cors = require("cors");
 const { client } = require("./db");
@@ -6,10 +8,8 @@ app.use(express.json())
 app.use(cors())
 var bodyParser = require("body-parser");
 
-require("dotenv").config();
-
-const port = 8080;
-const host = "localhost";
+const port = process.env.PORT || 8080;
+const host = "0.0.0.0";
 
 const userRoutes = require("./api/Users.js");
 const watchlistRoutes = require("./api/Watchlist.js");

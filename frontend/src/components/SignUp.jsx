@@ -10,7 +10,7 @@ export default function SignUp(){
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const url = "http://localhost:8080/api/auth/register";
+        const url = `${import.meta.env.VITE_API_URL}/api/auth/register`;
         try{
             const response = await fetch(url, {
                 method: "POST",

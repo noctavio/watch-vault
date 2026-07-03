@@ -12,7 +12,7 @@ export default function Login(){
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const url = "http://localhost:8080/api/auth/login";
+        const url = `${import.meta.env.VITE_API_URL}/api/auth/login`;
         try{
             const response = await fetch(url, {
                 method: "POST",
