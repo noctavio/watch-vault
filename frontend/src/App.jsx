@@ -5,7 +5,6 @@ import SignUp from './components/SignUp.jsx'
 import Settings from './components/Settings.jsx';
 import Search from './components/Search.jsx';
 import Admin from './components/Admin.jsx';
-import ByPassLogin from './components/AdminByPassLogin.jsx';
 import Watchlist from './components/Watchlist.jsx';
 import MovieRequest from './components/MovieRequest.jsx';
 import CreateReviews from './components/CreateReviews.jsx';
