@@ -86,6 +86,16 @@ export default function CompletedSeries() {
                 }
 
                 setMovies(foundSeriesMovies);
+                // Add every fetched movie to DB
+                await Promise.all(
+                    foundSeriesMovies.map((movie) => 
+                        fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ id: movie.id }),
+                        }).catch(() => {})
+                    )
+                );
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -117,27 +127,21 @@ export default function CompletedSeries() {
             return;
         }
         try {
-            const requestRes = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: movie.id }),
-            });
-            const requestData = await requestRes.json();
-            if (!requestRes.ok && requestRes.status !== 409) {
-                throw new Error(requestData.error || "Failed to save movie to the vault.");
-            }
-            const movieToSave = requestData.movie || movie;
             const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
             const currentItems = data.items ?? [];
+            if (currentItems.some(item => item.id === movie.id)) {
+                setAlertMessage({ type: "warning", message: `"${movie.title}" is already in your watchlist.` });
+                return;
+            }
             const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items: [...currentItems, movieToSave] }),
+                body: JSON.stringify({ items: [...currentItems, movie] }),
             });
             if (!putRes.ok) throw new Error("Failed to update watchlist.");
-            setWatchlistIds(prev => new Set([...prev, movie.id]))
+            setWatchlistIds(prev => new Set([...prev, movie.id]));
         } catch (err) {
             setAlertMessage({ type: "danger", message: err.message });
         }

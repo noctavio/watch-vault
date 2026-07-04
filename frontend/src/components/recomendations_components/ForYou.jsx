@@ -30,6 +30,18 @@ const chunkArray = (arr, size) => {
     return chunks;
 };
 
+const saveMoviesToDB = (movies) => {
+    Promise.all(
+        movies.map((m) =>
+            fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: m.id }),
+            }).catch(() => {})
+        )
+    );
+};
+
 export default function ForYou() {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
@@ -53,17 +65,9 @@ export default function ForYou() {
                 if (!res.ok) throw new Error(data.error || "Failed to fetch recommendations.");
                 const normalized = (data.results || []).map(normalizeMovie);
 
-                await Promise.all(
-                    normalized.map((movie) =>
-                        fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ id: movie.id }),
-                        }).catch(() => {}) // ignore movies alread in localdb
-                    )
-                );
-
                 setMovies(normalized);
+                // Add every fetched movie to DB
+                saveMoviesToDB(normalized);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -73,9 +77,9 @@ export default function ForYou() {
         if (user?.userId) fetchMovies();
     }, [user]);
 
-        useEffect(() => {
-            const fetchWatchlist = async () => {
-                if (!user?.watchlistId) return;
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            if (!user?.watchlistId) return;
                 try {
                     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
                     if (!res.ok) return;
@@ -95,33 +99,27 @@ export default function ForYou() {
             return;
         }
         try {
-            const requestRes = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: movie.id }),
-            });
-            const requestData = await requestRes.json();
-            if (!requestRes.ok && requestRes.status !== 409) {
-                throw new Error(requestData.error || "Failed to save movie to the vault.");
-            }
-            const movieToSave = requestData.movie || movie;
             const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
             const currentItems = data.items ?? [];
+            if (currentItems.some(item => item.id === movie.id)) {
+                setAlertMessage({ type: "warning", message: `"${movie.title}" is already in your watchlist.` });
+                return;
+            }
             const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items: [...currentItems, movieToSave] }),
+                body: JSON.stringify({ items: [...currentItems, movie] }),
             });
             if (!putRes.ok) throw new Error("Failed to update watchlist.");
-            setWatchlistIds(prev => new Set([...prev, movie.id]))
+            setWatchlistIds(prev => new Set([...prev, movie.id]));
         } catch (err) {
             setAlertMessage({ type: "danger", message: err.message });
         }
     };
 
-        const removeFromWatchlist = async (movie) => {
+    const removeFromWatchlist = async (movie) => {
         try {
             const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");

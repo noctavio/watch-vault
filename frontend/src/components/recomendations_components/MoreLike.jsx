@@ -30,6 +30,18 @@ const chunkArray = (arr, size) => {
     return chunks;
 };
 
+const saveMoviesToDB = (movies) => {
+    Promise.all(
+        movies.map((m) =>
+            fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: m.id }),
+            }).catch(() => {})
+        )
+    );
+};
+
 export default function MoreLike() {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
@@ -71,6 +83,8 @@ export default function MoreLike() {
                             .map(normalizeMovie);
                         if (filtered.length > 0) {
                             setMovies(filtered);
+                            // Insert before returning
+                            saveMoviesToDB(filtered);
                             return;
                         }
                     }
@@ -87,6 +101,8 @@ export default function MoreLike() {
                     .filter((m) => !watchlistIds.includes(m.id))
                     .map(normalizeMovie);
                 setMovies(randomMovies);
+                // Add every fetched movie to DB
+                saveMoviesToDB(randomMovies);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -118,33 +134,27 @@ export default function MoreLike() {
             return;
         }
         try {
-            const requestRes = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/request`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: movie.id }),
-            });
-            const requestData = await requestRes.json();
-            if (!requestRes.ok && requestRes.status !== 409) {
-                throw new Error(requestData.error || "Failed to save movie to the vault.");
-            }
-            const movieToSave = requestData.movie || movie;
             const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
             const data = await getRes.json();
             const currentItems = data.items ?? [];
+            if (currentItems.some(item => item.id === movie.id)) {
+                setAlertMessage({ type: "warning", message: `"${movie.title}" is already in your watchlist.` });
+                return;
+            }
             const putRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items: [...currentItems, movieToSave] }),
+                body: JSON.stringify({ items: [...currentItems, movie] }),
             });
             if (!putRes.ok) throw new Error("Failed to update watchlist.");
-            setWatchlistIds(prev => new Set([...prev, movie.id]))
+            setWatchlistIds(prev => new Set([...prev, movie.id]));
         } catch (err) {
             setAlertMessage({ type: "danger", message: err.message });
         }
     };
 
-        const removeFromWatchlist = async (movie) => {
+    const removeFromWatchlist = async (movie) => {
         try {
             const getRes = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
             if (!getRes.ok) throw new Error("Failed to fetch watchlist.");
