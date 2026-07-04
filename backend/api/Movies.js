@@ -134,14 +134,12 @@ router.post("/movies/request", async (req, res) => {
 });
 
 // removes a movie from the localdb instance
-router.delete('/movies/remove', async (req, res) => {
+router.delete('/movies/remove/:id', async (req, res) => {
     try {
-        const { id } = req.body;
+        const id = Number(req.params.id);
         if (!id) return res.status(400).send({ error: "Movie ID required" });
-
-        const result = await db.collection("Movies").deleteOne({ id: Number(id) });
+        const result = await db.collection("Movies").deleteOne({ id });
         if (result.deletedCount === 0) return res.status(404).send({ error: "Movie not found" });
-
         res.status(200).send({ message: "Movie removed from the vault" });
     } catch (error) {
         console.error("Error deleting movie:", error);

@@ -123,10 +123,9 @@ export default function Search() {
         e.stopPropagation();
         if (!window.confirm(`Remove "${movie.title}" from the vault?`)) return;
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/remove`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/movies/remove/${movie.id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: movie.id }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
