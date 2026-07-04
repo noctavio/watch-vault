@@ -1,3 +1,6 @@
+# DISCLAIMER
+Since I'm running Vercel, the app takes anywhere from 20-40 seconds to wakup upon the first request
+
 # AL_10
 - `Alex Erickson` - aerick22@iastate.edu
 - `Octavio Munoz` - munozo@iastate.edu
