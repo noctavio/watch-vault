@@ -141,13 +141,13 @@ export default function Home() {
                         <Card.ImgOverlay className="text-center">
                             <Card.Title as="h2">WELCOME TO WATCHVAULT</Card.Title>
                             <br />
-                            <Card.Text>
+                            <Card.Text style={{ maxWidth: '920px', margin: '0 auto' }}>
                                 Welcome to WatchVault, your personal hub for everything movies!
                                 Whether you're searching for your next favorite film, keeping track
                                 of what you want to watch, or looking for personalized
                                 recommendations, we've got you covered. Browse our collection,
                                 build your own watchlist, and never lose track of a great movie
-                                again. Your next great watch is just a click away!
+                                again
                             </Card.Text>
                             <br />
                             <Form onSubmit={handleSearch} className="d-flex justify-content-center mb-3">
