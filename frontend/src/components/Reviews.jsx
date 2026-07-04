@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Card, Button, Spinner, Alert, Form, Badge } from 'react-bootstrap';
 import Layout from './Layout.jsx';
 import { UserContext } from './User';
@@ -8,23 +8,50 @@ export default function Reviews() {
     const { movieId } = useParams();
     const { user } = useContext(UserContext);
 
+    const [watchlist, setWatchlist]  = useState([]);
+    const [itemsChecked, setItemsChecked] = useState([]);
     const [movie, setMovie] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [sortBy, setSortBy] = useState('date');
+    const navigate = useNavigate();
 
     // Edit state
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState('');
     const [editDesc, setEditDesc] = useState('');
     const [editRating, setEditRating] = useState('');
+    const [editCreateWarning, setCreateWarning] = useState('');
+
     const [editLoading, setEditLoading] = useState(false);
 
     const [page, setPage] = useState(1);
     const REVIEWS_PER_PAGE = 5;
 
     const handleSort = (val) => { setSortBy(val); setPage(1); }
+
+    const fetchWatchlist = async () => {
+        setLoading(true);
+        setError(null);
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+                if (!res.ok) throw new Error("Failed to fetch watchlist.");
+                const data = await res.json();
+                setWatchlist(data.items ?? []);
+                setItemsChecked(data.itemsChecked ?? []);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        useEffect(() => {
+            if (user?.watchlistId) {
+                fetchWatchlist();
+            }
+        }, [user]);
 
     useEffect(() => {
         fetchMovie();
@@ -133,6 +160,11 @@ export default function Reviews() {
         return review.voters?.find((v) => v.userId === user._id)?.vote || null;
     };
 
+    // Only movies marked as watched are reviewable
+    const watchedMovies = watchlist.filter((movie) =>
+        itemsChecked.includes(movie.id)
+    );
+
     return (
         <Layout>
             <Container style={{ maxWidth: '800px' }} className="py-5">
@@ -156,6 +188,31 @@ export default function Reviews() {
                             <p style={{ color: '#D4D2E0', fontSize: '0.9rem' }}>{movie.description}</p>
                         </div>
                     </div>
+                )}
+                <Button
+                    style={{ color: '#ffffff' }}
+                    onClick={() => {
+                        if (!user) {
+                            setCreateWarning("You must be logged in to write a review.");
+                            return;
+                        }
+                        const inWatchlist = watchlist.some(w => w.id === movie.id);
+                        const isWatched = itemsChecked.includes(movie.id);
+                        if (!inWatchlist) {
+                            setCreateWarning("Add this movie to your watchlist before reviewing.");
+                            return;
+                        }
+                        if (!isWatched) {
+                            setCreateWarning("Mark this movie as watched in your watchlist before reviewing.");
+                            return;
+                        }
+                        navigate('/create_review', { state: { movieId: movie.id } });
+                    }}
+                >
+                    Create Review
+                </Button>
+                {editCreateWarning && (
+                    <p className="text-danger small mt-2">{editCreateWarning}</p>
                 )}
 
                 {/* Sort + heading row */}
@@ -233,7 +290,7 @@ export default function Reviews() {
                                                 <option key={n} value={n}>
                                                     {n} / 10 {n === 10 ? '- Masterpiece' : n >= 9 ? '-  Incredible' : 
                                                     n == 8 ? '-  Great' : n >= 6 ? '- Good' : n >= 5 ? '- Average' : 
-                                                    n >= 4 ? '- Below Average': n >= 2 ? '- Poor' : '-  Slept'
+                                                    n >= 4 ? '- Below Average': n >= 2 ? '- Bad' : '-  Terrible'
                                                     }
                                                 </option>
                                             ))}

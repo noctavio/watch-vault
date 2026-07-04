@@ -1,5 +1,5 @@
 import { Card, Button, Spinner, Form, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './User';
 import Layout from './Layout.jsx';
@@ -24,28 +24,36 @@ export default function CreateReviews() {
     const [description, setDescription] = useState('');
     const [rating, setRating] = useState('');
     const [recommend, setRecommend] = useState(false);
+    const location = useLocation();
+    const preselectedId = location.state?.movieId;
 
     const fetchWatchlist = async () => {
     setLoading(true);
     setError(null);
-    try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
-        if (!res.ok) throw new Error("Failed to fetch watchlist.");
-        const data = await res.json();
-        setWatchlist(data.items ?? []);
-        setItemsChecked(data.itemsChecked ?? []);
-    } catch (err) {
-        setError(err.message);
-    } finally {
-        setLoading(false);
-    }
-};
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist/${user.watchlistId}`);
+            if (!res.ok) throw new Error("Failed to fetch watchlist.");
+            const data = await res.json();
+            setWatchlist(data.items ?? []);
+            setItemsChecked(data.itemsChecked ?? []);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-    if (user?.watchlistId) {
-        fetchWatchlist();
-    }
-}, [user]);
+        if (user?.watchlistId) {
+            fetchWatchlist();
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (preselectedId) {
+            setSelectedMovie(String(preselectedId));
+        }
+    }, [preselectedId]);
 
     if (isLogin(user)) {
         return (
@@ -104,13 +112,7 @@ export default function CreateReviews() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Failed to submit review.');
-            setSuccess(`Your review for "${movie.title}" was submitted!`);
-            // Reset form
-            setSelectedMovie('');
-            setTitle('');
-            setDescription('');
-            setRating('');
-            setRecommend(false);
+            navigate(`/reviews/${movie.id}`)
         } catch (err) {
             setError(err.message);
         } finally {
@@ -155,22 +157,6 @@ export default function CreateReviews() {
 
                         {!loading && watchedMovies.length > 0 && (
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Movie</Form.Label>
-                                    <Form.Select
-                                        value={selectedMovie}
-                                        onChange={(e) => setSelectedMovie(e.target.value)}
-                                        style={{ backgroundColor: '#2A2740', border: '1px solid #3D3960', color: '#F2F0FA' }}
-                                    >
-                                        <option value="">= Select a watched movie =</option>
-                                        {watchedMovies.map((movie) => (
-                                            <option key={movie.id} value={movie.id}>
-                                                {movie.title} ({movie.releaseYear})
-                                            </option>
-                                        ))}
-                                    </Form.Select>
-                                </Form.Group>
-
                                 {selectedMovie && (() => {
                                     const m = watchedMovies.find((mv) => mv.id === Number(selectedMovie));
                                     return m ? (
