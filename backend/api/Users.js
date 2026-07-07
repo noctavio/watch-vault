@@ -42,31 +42,6 @@ router.post("/auth/login", async (req, res) => {
     }
 });
 
-router.post("/auth/admin/bypass/login", async (req, res) => {
-    if (!req.body || Object.keys(req.body).length === 0) {
-        return res.status(400).send({ error: 'Bad request: No data provided' });
-    }
-    try {
-        const user = await db.collection("Users").findOne({ email: req.body.email });
-        const isMatch = req.body.password === adminKey;
-        if (!isMatch) {
-            return res.status(401).send({ error: 'Invalid credentials' });
-        }
-        res.status(200).send({
-            _id: user._id,
-            userId: user.userId,
-            username: user.username,
-            email: user.email,
-            watchlistId: user.watchlistId,
-            favGeneres: user.favGeneres,
-            role: "admin"
-        });
-    } catch (error) {
-        console.error("An error occurred:", error);
-        res.status(500).send({ error: 'An internal server error occurred' });
-    }
-});
-
 router.post("/auth/register", async (req, res) => {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -184,30 +159,6 @@ router.get("/auth/admin/users", async (req, res) => {
     const results = await db.collection("Users").find({}).limit(100).toArray();
     console.log(results);
     res.status(200).send(results);
-});
-
-router.post("/auth/admin/users/:id/role", async (req, res) => {
-    try {
-        const id = Number(req.params.id);
-        if (isNaN(id)) {
-            return res.status(400).send({ error: "Invalid ID format" });
-        }
-        const { role } = req.body;
-        if (!["user", "admin"].includes(role)) {
-            return res.status(400).send({ error: "Invalid role, must be 'user' or 'admin'" });
-        }
-        const result = await db.collection("Users").updateOne(
-            { userId: id },
-            { $set: { role } }
-        );
-        if (result.modifiedCount === 0) {
-            return res.status(404).send({ error: "No user found with that ID" });
-        }
-        res.status(200).send({ message: "Role updated successfully" });
-    } catch (error) {
-        console.error("Error updating role:", error);
-        res.status(500).send({ error: "An internal server error occurred" });
-    }
 });
 
 module.exports = router;
