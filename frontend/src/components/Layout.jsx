@@ -1,11 +1,13 @@
 import { Container, Navbar, Nav, Row, Col } from 'react-bootstrap';
+//import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { UserContext } from './UserContext.jsx';
 
 export default function Layout({ children }) {
     const navLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link';
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div className="bar-and-footer">
             <header>
                 <Navbar expand="lg" data-bs-theme="dark">
                     <Container fluid>
@@ -14,10 +16,8 @@ export default function Layout({ children }) {
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto">
                                 <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
-                                <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Recommendations</Nav.Link>
+                                <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>Profile</Nav.Link>
                                 <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
-                                <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>Settings</Nav.Link>
-                                <Nav.Link as={NavLink} to="/adminpage" className={navLinkClass}>Admin Controls</Nav.Link>
                                 <Nav.Link as={NavLink} to="/">Logout</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
