@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useSearchParams, NavLink, useNavigate } from 'react-router-dom';
 import { Container, Spinner, Alert, Card, Button } from 'react-bootstrap';
 import Layout from './Layout.jsx';
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 
 export default function Search() {
     const navigate = useNavigate();

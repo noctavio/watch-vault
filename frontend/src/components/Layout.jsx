@@ -1,31 +1,12 @@
 import { Container, Navbar, Nav, Row, Col } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
-import React, { useContext } from 'react';
-import { UserContext } from './User';
+import { NavLink } from 'react-router-dom';
 
 export default function Layout({ children }) {
-    const { user, setUser } = useContext(UserContext);
-    const navigate = useNavigate();
-    const isLoggedIn = (aUser) => {
-        return (
-            aUser !== null &&
-            aUser !== undefined &&
-            Object.keys(aUser).length > 0
-        );
-    };
-    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-    const navLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link'
+    const navLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link';
 
-    const logOut = () => {
-        if (window.confirm("Do you wish to Log Out?")) {
-            localStorage.removeItem("token");
-            setUser(null);
-            navigate("/");
-        }
-    };
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <header>
+            <header>
                 <Navbar expand="lg" data-bs-theme="dark">
                     <Container fluid>
                         <Navbar.Brand as={NavLink} to="/">WatchVault</Navbar.Brand>
@@ -34,19 +15,10 @@ export default function Layout({ children }) {
                             <Nav className="ms-auto">
                                 <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
                                 <Nav.Link as={NavLink} to="/recommendations" className={navLinkClass}>Recommendations</Nav.Link>
-                                {!isLoggedIn(user) ? (
-                                    <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
-                                ) : (
-                                    <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>{user?.username}</Nav.Link>
-                                )}
-                                {user?.role === 'admin' && (
-                                    <Nav.Link as={NavLink} to="/adminpage" className={navLinkClass}>Admin Controls</Nav.Link>
-                                )}
-                                {isLoggedIn(user) && (
-                                    <Nav.Link onClick={logOut}>
-                                        Logout
-                                    </Nav.Link>
-                                )}
+                                <Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>
+                                <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>Settings</Nav.Link>
+                                <Nav.Link as={NavLink} to="/adminpage" className={navLinkClass}>Admin Controls</Nav.Link>
+                                <Nav.Link as={NavLink} to="/">Logout</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
@@ -61,14 +33,12 @@ export default function Layout({ children }) {
                         <Col sm={6}>
                             <p>©Team AL_10</p>
                         </Col>
-                        <Col sm={6} >
-                            <p className="back-to-top" onClick={scrollToTop}>
-                                Back to top
-                            </p>
+                        <Col sm={6}>
+                            <p className="back-to-top">Back to top</p>
                         </Col>
                     </Row>
                 </Container>
             </footer>
-    </div>
+        </div>
     );
-};
+}

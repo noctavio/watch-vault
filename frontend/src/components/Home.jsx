@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Container, Card, Button, Form, InputGroup, Carousel, Alert } from 'react-bootstrap';
 import Background from '../assets/background.jpg';
 import { useState, useEffect, useContext } from 'react';
-import { UserContext } from './User.jsx';
+import { UserContext } from './UserContext.jsx';
 
 const normalizeMovie = (movie) => ({
     id: movie.id,

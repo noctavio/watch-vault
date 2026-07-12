@@ -4,7 +4,7 @@ import React, { useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 
 export default function SignUp() {
     const { setUser } = useContext(UserContext);

@@ -1,7 +1,7 @@
 import { Card, Button, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 import Layout from './Layout.jsx';
 import { PersonCircle } from 'react-bootstrap-icons';
 

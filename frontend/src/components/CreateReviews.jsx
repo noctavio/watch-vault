@@ -1,7 +1,7 @@
 import { Card, Button, Spinner, Form, Alert } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 import Layout from './Layout.jsx';
 import { PersonCircle } from 'react-bootstrap-icons';
 

@@ -1,7 +1,7 @@
 import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
 import ApiKeys from './admin_components/ApiKeys.jsx';

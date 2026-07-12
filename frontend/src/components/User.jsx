@@ -1,5 +1,5 @@
-import { useState, createContext } from "react";
-export const UserContext = createContext();
+import { useState } from "react";
+import { UserContext } from "./UserContext.jsx";
 
 export default function UsersProvider({ children }) {
     const [user, setUser] = useState(() => {

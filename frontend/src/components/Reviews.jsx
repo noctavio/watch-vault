@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Card, Button, Spinner, Alert, Form, Badge } from 'react-bootstrap';
 import Layout from './Layout.jsx';
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 
 export default function Reviews() {
     const { movieId } = useParams();

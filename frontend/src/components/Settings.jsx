@@ -2,7 +2,7 @@ import { Card, Form, Button, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
-import { UserContext } from './User';
+import { UserContext } from './UserContext';
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
 
