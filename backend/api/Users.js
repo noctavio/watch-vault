@@ -63,28 +63,22 @@ router.post("/auth/register", async (req, res) => {
         }
 
         const lastUser = await usersCollection.findOne({}, { sort: { userId: -1 } });
-        const userId = lastUser ? lastUser.userId + 1 : 1;
 
-        const lastWatchlist = await watchlistsCollection.findOne({}, { sort: { watchlistId: -1 } });
-        const watchlistId = lastWatchlist ? lastWatchlist.watchlistId + 1 : 1;
+        const num = 2;
 
-        await watchlistsCollection.insertOne({
-            watchlistId,
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const watchlistResult = await watchlistsCollection.insertOne({
             items: [],
             createdAt: new Date(),
             updatedAt: new Date(),
         });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         await usersCollection.insertOne({
-            username,
-            email,
-            password: hashedPassword,
-            watchlistId,
+            username, email, password: hashedPassword,
+            watchlistId: watchlistResult.insertedId,   // ObjectId, guaranteed unique, no race condition
             favGeneres: [],
             createdAt: new Date(),
-            userId,
             role: "user"
         });
 
