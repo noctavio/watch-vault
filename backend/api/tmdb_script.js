@@ -1,7 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 
-const API_KEY = process.env.VITE_API_KEY;
+const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = process.env.VITE_BASE_URL;
 const IMAGE_BASE = process.env.VITE_IMAGE_BASE;
 const TOTAL_MOVIES = 1000;
