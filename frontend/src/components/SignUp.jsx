@@ -1,5 +1,5 @@
 import { Card, Form, Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { } from "react-hook-form";
 import { PersonCircle } from 'react-bootstrap-icons';
@@ -10,6 +10,8 @@ export default function SignUp() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,7 +27,7 @@ export default function SignUp() {
             
             if (!res.ok) {
                 if (res.status === 409) {
-                    console.error("Generic 409 error: ", data.error);
+                    console.error("409 error: ", data.error);
                     return;
                 }
                 if (res.status === 400) {
@@ -37,6 +39,7 @@ export default function SignUp() {
             }
             
             console.log("Registered successfully:", data);
+            navigate('/')
         } catch (err) {
             console.error("Network error, server unreachable:", err.message);
         }
@@ -83,6 +86,8 @@ export default function SignUp() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Form.Group>
+
+                            {/* Error message div here*/}
 
                             <Button variant="primary" type="submit" className="w-100 mb-3">
                                 Create Account
