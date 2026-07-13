@@ -23,14 +23,14 @@ export default function Login(){
                                     <Form.Label>Username</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        placeholder="Enter Username"
+                                        placeholder="..."
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formPassword">
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control
                                         type="password"
-                                        placeholder="Password"
+                                        placeholder="..."
                                     />
                                 </Form.Group>
 

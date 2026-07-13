@@ -74,5 +74,4 @@ router.delete("/user/delete", async (req, res) => {
     res.json({message:"echo delete USER"})
 })
 
-
 module.exports = router;

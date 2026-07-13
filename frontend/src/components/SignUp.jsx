@@ -1,6 +1,6 @@
 import { Card, Form, Button } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { } from "react-hook-form";
 import { PersonCircle } from 'react-bootstrap-icons';
 import Layout from './Layout.jsx';
@@ -12,9 +12,11 @@ export default function SignUp() {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+    const {setUser} = useContext(UserContext);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorMessage("");
 
         try {
             const res = await fetch (`${import.meta.env.VITE_API_URL}/user/register`, {
@@ -23,25 +25,25 @@ export default function SignUp() {
                 body: JSON.stringify({username, email, password}),
             });
 
-            const data = await res.json();
+            const data = await res.json(); // Returns token as part of the user object, although does not store in the db
             
             if (!res.ok) {
                 if (res.status === 409) {
-                    console.error("409 error: ", data.error);
+                    setErrorMessage(data.error);
                     return;
                 }
                 if (res.status === 400) {
-                    console.error("Inputs missing: ", data.error);
+                    setErrorMessage(data.error);
                     return;
                 }
-                console.log("Something went wrong:", data);
+                setErrorMessage(data.error);
                 return;
             }
-            
+            setUser(data);
             console.log("Registered successfully:", data);
             navigate('/')
         } catch (err) {
-            console.error("Network error, server unreachable:", err.message);
+            setErrorMessage(err.message);
         }
 
     };
@@ -61,7 +63,7 @@ export default function SignUp() {
                                 <Form.Label>Username*</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Enter Username"
+                                    placeholder="..."
                                     value={username}
                                     onChange={(e)=> setUsername(e.target.value)}
                                 />
@@ -71,7 +73,7 @@ export default function SignUp() {
                                 <Form.Label>Email address*</Form.Label>
                                 <Form.Control
                                     type="email"
-                                    placeholder="Enter Email"
+                                    placeholder="..."
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -81,13 +83,13 @@ export default function SignUp() {
                                 <Form.Label>Password*</Form.Label>
                                 <Form.Control
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder="..."
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Form.Group>
 
-                            {/* Error message div here*/}
+                            {errorMessage && <div className="input-error"> {errorMessage} </div>}
 
                             <Button variant="primary" type="submit" className="w-100 mb-3">
                                 Create Account

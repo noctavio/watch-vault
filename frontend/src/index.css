@@ -249,3 +249,8 @@ footer{
 .back-to-top:hover {
     color: #C94060;
 }
+
+.input-error {
+    color: #ff003c;
+    text-align: center
+}
