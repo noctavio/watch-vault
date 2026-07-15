@@ -28,14 +28,6 @@ export default function SignUp() {
             const data = await res.json(); // Returns token as part of the user object, although does not store in the db
             
             if (!res.ok) {
-                if (res.status === 409) {
-                    setErrorMessage(data.error);
-                    return;
-                }
-                if (res.status === 400) {
-                    setErrorMessage(data.error);
-                    return;
-                }
                 setErrorMessage(data.error);
                 return;
             }
