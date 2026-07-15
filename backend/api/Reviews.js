@@ -22,7 +22,7 @@ router.get("/reviews/:movieId", async (req, res) => {
 router.post("/reviews", async (req, res) => {
     const { movieId, movieTitle, moviePoster, movieYear, userId, username, title, description, rating } = req.body;
 
-    if (!movieId || !userId || !username || !title || !description || rating == null) {
+    if (!movieId || !username || !title || !description || rating == null) {
         return res.status(400).send({ error: "Missing required fields" });
     }
     if (rating < 1 || rating > 10) {
