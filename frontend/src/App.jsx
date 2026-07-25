@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './components/Home.jsx'
 import Login from './components/Login.jsx'
 import SignUp from './components/SignUp.jsx'
-import Settings from './components/Settings.jsx';
+import Profile from './components/Profile.jsx';
 import Search from './components/Search.jsx';
 import Admin from './components/Admin.jsx';
 import Watchlist from './components/Watchlist.jsx';
@@ -18,7 +18,7 @@ export default function App(){
             <Route path='/adminpage' element={<Admin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/movierequest" element={<MovieRequest />} />

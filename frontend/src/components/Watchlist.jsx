@@ -5,10 +5,6 @@ import { UserContext } from './UserContext';
 import Layout from './Layout.jsx';
 import { PersonCircle } from 'react-bootstrap-icons';
 
-const isLogin = (aUser) => {
-    return (aUser === null || aUser === undefined || Object.keys(aUser).length === 0);
-};
-
 export default function Watchlist() {
     const { user } = useContext(UserContext);
     const [watchlist, setWatchlist] = useState([]);
@@ -71,7 +67,7 @@ export default function Watchlist() {
         }
     };
  
-    if (isLogin(user)) {
+    if (!user) {
         return (
             <Layout>
                 <div className="d-flex justify-content-center align-items-center min-vh-100">

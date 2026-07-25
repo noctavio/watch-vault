@@ -27,7 +27,7 @@ export default function Layout({ children }) {
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto">
                                 <Nav.Link as={NavLink} to="/watchlist" className={navLinkClass}>Watchlist</Nav.Link>
-                                <Nav.Link as={NavLink} to="/settings" className={navLinkClass}>Profile</Nav.Link>
+                                <Nav.Link as={NavLink} to="/profile" className={navLinkClass}>Profile</Nav.Link>
                                 {user ? (<Nav.Link onClick={handleLogout}> Logout </Nav.Link>) : 
                                         (<Nav.Link as={NavLink} to="/login" className={navLinkClass}>Login</Nav.Link>) }
                             </Nav>
