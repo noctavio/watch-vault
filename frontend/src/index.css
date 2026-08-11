@@ -217,6 +217,10 @@ footer{
     font-family: 'Playfair Display', serif;
     color: #C9A84C;
     background-color: #0C0B0F;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .search-grid {

@@ -4,18 +4,17 @@ import Login from './components/Login.jsx'
 import SignUp from './components/SignUp.jsx'
 import Profile from './components/Profile.jsx';
 import Search from './components/Search.jsx';
-import Admin from './components/Admin.jsx';
 import Watchlist from './components/Watchlist.jsx';
 import MovieRequest from './components/MovieRequest.jsx';
 import CreateReviews from './components/CreateReviews.jsx';
 import Reviews from './components/Reviews.jsx';
+import Settings from './components/Settings.jsx';
 
 export default function App(){
     return (
     <>
         <Routes>
             <Route path='/watchlist' element={<Watchlist/>} />
-            <Route path='/adminpage' element={<Admin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/profile" element={<Profile />} />
@@ -24,6 +23,7 @@ export default function App(){
             <Route path="/movierequest" element={<MovieRequest />} />
             <Route path="/reviews/:movieId" element={<Reviews/>} /> {/* each movie has a unique review page*/}
             <Route path="/create_review" element={<CreateReviews />} />
+            <Route path="/settings" element={<Settings />} />
         </Routes>
     </>
     );

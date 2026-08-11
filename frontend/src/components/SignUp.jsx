@@ -42,7 +42,7 @@ export default function SignUp() {
 
     return (
         <Layout>
-            <div className="d-flex justify-content-center align-items-center min-vh-100">
+            <div className="d-flex justify-content-center align-items-center">
                 <Card className="p-3" style={{ width: "100%", maxWidth: "400px" }}>
                     <Card.Header className="text-center border-0 bg-transparent pt-3">
                         <PersonCircle size={64} />
@@ -55,7 +55,6 @@ export default function SignUp() {
                                 <Form.Label>Username*</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="..."
                                     value={username}
                                     onChange={(e)=> setUsername(e.target.value)}
                                 />
@@ -65,7 +64,6 @@ export default function SignUp() {
                                 <Form.Label>Email address*</Form.Label>
                                 <Form.Control
                                     type="email"
-                                    placeholder="..."
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -75,7 +73,6 @@ export default function SignUp() {
                                 <Form.Label>Password*</Form.Label>
                                 <Form.Control
                                     type="password"
-                                    placeholder="..."
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />

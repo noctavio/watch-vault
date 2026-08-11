@@ -42,7 +42,7 @@ export default function Login(){
     return (
         <>
             <Layout>
-                <div className="d-flex justify-content-center align-items-center min-vh-100">
+                <div className="d-flex justify-content-center align-items-center">
                     <Card className="p-3" style={{ width: "100%", maxWidth: "400px" }}>
                         <Card.Header className="text-center border-0 bg-transparent pt-3">
                             <PersonCircle size={64} />
@@ -54,7 +54,6 @@ export default function Login(){
                                     <Form.Label>Username/Email</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        placeholder="..."
                                         value={usernameOrEmail}
                                         onChange={(e)=> setUsernameOrEmail(e.target.value)}
                                     />
@@ -63,7 +62,6 @@ export default function Login(){
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control
                                         type="password"
-                                        placeholder="..."
                                         value={password}
                                         onChange={(e)=> setPassword(e.target.value)}
                                     />

@@ -42,9 +42,6 @@ export default function Layout({ children }) {
                 <Container>
                     <Row>
                         <Col sm={6}>
-                            <p>©Team AL_10</p>
-                        </Col>
-                        <Col sm={6}>
                             <p className="back-to-top">Back to top</p>
                         </Col>
                     </Row>

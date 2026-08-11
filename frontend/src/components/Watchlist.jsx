@@ -70,7 +70,7 @@ export default function Watchlist() {
     if (!user) {
         return (
             <Layout>
-                <div className="d-flex justify-content-center align-items-center min-vh-100">
+                <div className="d-flex justify-content-center align-items-center">
                     <Card className="p-4 text-center" style={{ maxWidth: "400px", width: "100%" }}>
                         <Card.Body>
                             <PersonCircle size={64} color="#C9A84C" className="mb-3" />
