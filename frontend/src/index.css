@@ -193,6 +193,10 @@ h5{
     box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.2);
 }
 
+.form-edit{
+    max-width: 400px;
+}
+
 .form-control::placeholder {
     color: #6c6a7e;
 }
